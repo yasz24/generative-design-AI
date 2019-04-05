@@ -1,8 +1,5 @@
 import copy
-<<<<<<< HEAD
 from CSP import *
-=======
->>>>>>> 219b55a7d9cac93bd9a641f598d876a0786b24a1
 
 def backtrackingSearch(csp):
 	return recursiveBackTrackingSearch({}, csp.variables, csp.domains, csp.constraints)
