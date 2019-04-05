@@ -10,9 +10,10 @@ def recursiveBackTrackingSearch(assignment, variables, domains, constraints):
 		return assignment
 
 	next_var = chooseVariable(assignment, variables)
-
+	#best approach probably to merge items in each domain list.
 	for domainList in domains[next_var]:
 		#could do an argmax here to make the best possible assignment/ q-learning here
+		#can also randomize values picked here, as well as the domainList picked.
 		for next_val in domainList:
 			assignment[next_var] = next_val
 			old_domains = copy.deepcopy(domains)
