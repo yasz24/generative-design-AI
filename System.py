@@ -2,6 +2,7 @@ import numpy
 import math
 import itertools
 import copy
+from Force import Force
 
 class System:
 
@@ -35,7 +36,7 @@ class System:
         for force in forces:
             if force.getDirection() == 'x':
                 self.forces[2 * force.getNode()] += force.getMagnitude()
-            if force.getDirection() == 'y':
+            elif force.getDirection() == 'y':
                 self.forces[2 * force.getNode() + 1] += force.getMagnitude()
             else:
                 raise Exception('Direction of force no in coordinate system')
@@ -85,7 +86,12 @@ class System:
             Bx = self.nodes[nodeB][0]
             By = self.nodes[nodeB][1]
             length = math.sqrt((math.pow(Ax - Bx, 2) + math.pow(Ay - By, 2)))
-            theta = math.radians(math.atan(By - Ay / (Bx - Ax)))
+            if abs(Bx-Ax) < 0.000001 and By-Ay > 0:
+                theta = (math.pi/2)
+            elif abs(Bx-Ax) < 0.000001 and By-Ay < 0:
+                theta = -(math.pi/2)
+            else:
+                theta = math.atan((By - Ay) / (Bx - Ax))
             k = ((self.modulus * self.area) / length) * numpy.array([[pow(math.cos(theta), 2), math.cos(theta)
                                                                       * math.sin(theta), -1 * pow(math.cos(theta), 2),
                               -1 * math.cos(theta) * math.sin(theta)],
@@ -124,7 +130,6 @@ class System:
             kglobal = numpy.delete(kglobal, (pos), axis=1)
             forces = numpy.delete(forces, (pos), axis=0)
 
-        zeroColumns = numpy.all(numpy.abs(kglobal) < 1e-5, axis=0)
         zeroRows = numpy.all(numpy.abs(kglobal) < 1e-5, axis=1)
 
         kglobal = kglobal[:, ~numpy.all(numpy.abs(kglobal) < 1e-5, axis=0)]
@@ -133,19 +138,11 @@ class System:
         kglobalidx = 0
         removed = copy.deepcopy(removed_one)
         removed.reverse()
-        for idx in range(0, len(removed) - 1):
-            if removed[idx + 1] - removed[idx] > 1:
-                if zeroRows[kglobalidx]:
-                    forces = numpy.delete(forces, (kglobalidx))
-                    removed_one.append(idx+kglobalidx)
-                if zeroRows[kglobalidx + 1]:
-                    forces = numpy.delete(forces, (kglobalidx))
-                    removed_one.append(idx+kglobalidx+1)
-                kglobalidx += 2
 
         for row in range(len(zeroRows)):
             if zeroRows[row]:
                 forces = numpy.delete(forces, (row))
+                removed_one.append(row)
 
         return kglobal, forces, removed_one
 
@@ -155,16 +152,17 @@ class System:
         :return: Returns the displacement of each node in the x and y coordinates
         """
         kglobal, forces, removed_one = self.applyBoundaryConditions()
+        print( removed_one)
         allDisplacements = numpy.zeros(len(self.nodes) * 2)
         displacements = numpy.matmul(numpy.linalg.inv(kglobal), forces)
         i = 0
         for idx in range(len(allDisplacements)):
             if idx in removed_one:
                 allDisplacements[idx] = 0
-
             else:
-                allDisplacements[idx] = displacements.pop(0)
-
+                allDisplacements[idx] = displacements[0]
+                displacements = displacements[1:]
+        return allDisplacements
 
     def computeStresses(self):
         stresses = []
@@ -192,5 +190,6 @@ class System:
 
 
 
-s = System(1,1,[(0,0), (1,0), (2,0)],[0,2],[(0,1), (1,2)], [])
+s = System(modulus=70e9, area=3e-4, nodes=[(3.46410161514,0),(1.73205080757,-1),(1.7320508757,0),(0,0),(0,1)],
+           fixedNodes=[3,4], connectivity=[(0,1),(0,2),(1,2),(1,3),(2,3),(2,4),(3,4)], forces=[Force(-5000,'y',0)])
 print(s.computeDisplacements())
