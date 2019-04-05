@@ -1,3 +1,5 @@
+from System import System
+
 class CSP:
 	def __init__(self, grid_size, discConstant):
 		self.variables = self.initializeVariables(grid_size)
@@ -51,9 +53,19 @@ class CSP:
 			curBeam+=1
 		return domains
 
+
+	
+
 	def checkConstraints(self, assignment):
 		#use finite solver to see if the assignment is good so far.
 		return True
+        maxRight = (0,0)
+        for idx in range(len(nodes)):
+            if nodes[idx] > maxRight[idx] and nodes[idx] == 0:
+                maxRight = idx
+        fixedNodes = [(nodes.index[(0,0)], idx)]
+        system = System(modulus=200e9, area=10e-6, nodes=nodes, fixedNodes=fixedNodes)
+
 
 
 
