@@ -2,7 +2,7 @@ class CSP:
 	def __init__(self, grid_size, discConstant):
 		self.variables = self.initializeVariables(grid_size)
 		self.domains = self.initializeDomain(grid_size)
-		self.constraints = self.checkConstraints()
+		self.constraints = self.checkConstraints
 		self.discConstant = 1
 
 
@@ -51,9 +51,9 @@ class CSP:
 			curBeam+=1
 		return domains
 
-	def checkConstraints(self):
-		return
-		#do nothing
+	def checkConstraints(self, assignment):
+		#use finite solver to see if the assignment is good so far.
+		return True
 
 
 
