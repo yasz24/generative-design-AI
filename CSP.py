@@ -1,4 +1,4 @@
-
+from Force import Force
 class CSP:
 	def __init__(self, grid_size, discConstant):
 		self.variables = self.initializeVariables(grid_size)
@@ -56,14 +56,37 @@ class CSP:
 	
 
 	def checkConstraints(self, assignment):
+		nodes = []
+		for key in assignment:
+			nodeA, nodeB = assignment[key]
+			if nodeA not in nodes:
+				nodes.append(nodeA)
+			if nodeB not in nodes:
+				node.append(nodeB)
+
+		connections = []
+		for key in assignment:
+			nodeA, nodeB = assignment[key]
+			connections.append((nodes.index(nodeA), nodes.index(nodeB)))
+
+        # uniformly distribute the load
+        loadPerNode = 1000
+        forces = []
+        for idx in range(len(nodes)):
+            forces.append(Force(-1 * load, 'y', idx))
+
 		#use finite solver to see if the assignment is good so far.
-		return True
-        # maxRight = (0,0)
-        # for idx in range(len(nodes)):
-        #     if nodes[idx] > maxRight[idx] and nodes[idx] == 0:
-        #         maxRight = idx
-        # fixedNodes = [(nodes.index[(0,0)], idx)]
-        # system = System(modulus=200e9, area=10e-6, nodes=nodes, fixedNodes=fixedNodes)
+        maxRight = (0,0)
+        maxIdx = 0
+        for idx in range(len(nodes)):
+             if nodes[idx][0] > maxRight[0] and nodes[idx][1] == 0:
+                 maxRight = nodes[idx]
+                 maxIdx = idx
+        fixedNodes = [(nodes.index[(0,0)], idx)]
+        system = System(modulus=70e9, area=3e-8, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections, forces=forces)
+        solutions = system.computeDisplacements()
+
+        
 
 
 

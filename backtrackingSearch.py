@@ -60,7 +60,7 @@ def updateDomains(assignment, variables, domains, next_val):
     domainMapVal = domains[var_for_domain_update]
     newDomainMapVal = []
     for domainList in domainMapVal:
-        print("********domainList{}".format(domainList))
+
         if domainList[0][0] == next_val[1]:
             newDomainMapVal.append(domainList)
 
