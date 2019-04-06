@@ -1,5 +1,6 @@
 import copy
 from CSP import *
+from random import shuffle
 
 def backtrackingSearch(csp):
 	return recursiveBackTrackingSearch({}, csp.variables, csp.domains, csp.constraints)
@@ -14,6 +15,7 @@ def recursiveBackTrackingSearch(assignment, variables, domains, constraints):
 	for domainList in domains[next_var]:
 		#could do an argmax here to make the best possible assignment/ q-learning here
 		#can also randomize values picked here, as well as the domainList picked.
+		shuffle(domainList)
 		for next_val in domainList:
 			assignment[next_var] = next_val
 			old_domains = copy.deepcopy(domains)
@@ -56,7 +58,7 @@ def updateDomains(assignment, variables, domains, next_val):
 	domainMapVal = domains[var_for_domain_update]
 	newDomainMapVal = []
 	for domainList in domainMapVal:
-		print("********domainList{}".format(domainList))
+		#print("********domainList{}".format(domainList))
 		if domainList[0][0] == next_val[1]:
 			newDomainMapVal.append(domainList)
 
