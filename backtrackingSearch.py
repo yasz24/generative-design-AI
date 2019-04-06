@@ -21,15 +21,16 @@ def recursiveBackTrackingSearch(assignment, variables, domains, constraints):
 			assignment[next_var] = next_val
 			old_domains = copy.deepcopy(domains)
 			if validAssignment(assignment, constraints):
-				print("validAssignment")
-				print("next_val{}".format(next_val))
+				print("*********validAssignment next_val{}".format(next_val))
+				#print("next_val{}".format(next_val))
 				updateDomains(assignment, variables, domains, next_val)
 				if noEmptyDomain(domains):
-					print("here")
 					result = recursiveBackTrackingSearch(assignment, variables, domains, constraints)
 					if result is not None:
 						return result
 			del assignment[next_var]
+			print("****backtracked next_val{}, next_var{}".format(next_val, next_var))
+
 			domains = old_domains
 	return None
 
@@ -52,7 +53,7 @@ def validAssignment(assignment, constraints):
 
 
 def updateDomains(assignment, variables, domains, next_val):
-    print("********domains{}".format(domains))
+    #print("********domains{}".format(domains))
     var_for_domain_update = chooseVariable(assignment, variables)
     if var_for_domain_update == None:
         return
@@ -69,7 +70,7 @@ def updateDomains(assignment, variables, domains, next_val):
     return
 
 def noEmptyDomain(domains):
-    print(domains)
+    #print(domains)
     for key in domains:
         if len(domains[key]) == 0:
             # print("returning False")
@@ -78,5 +79,5 @@ def noEmptyDomain(domains):
 
 
 csp = CSP(5, 0)
-print(csp.domains)
+#print(csp.domains)
 print(backtrackingSearch(csp))

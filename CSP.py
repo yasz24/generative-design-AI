@@ -1,4 +1,6 @@
 from Force import Force
+from System import System
+
 class CSP:
 	def __init__(self, grid_size, discConstant):
             self.variables = self.initializeVariables(grid_size)
@@ -62,7 +64,7 @@ class CSP:
                 if nodeA not in nodes:
                     nodes.append(nodeA)
                 if nodeB not in nodes:
-                    node.append(nodeB)
+                    nodes.append(nodeB)
 
             connections = []
             for key in assignment:
@@ -73,7 +75,7 @@ class CSP:
             loadPerNode = 1000
             forces = []
             for idx in range(len(nodes)):
-                forces.append(Force(-1 * load, 'y', idx))
+                forces.append(Force(-1 * loadPerNode, 'y', idx))
 
             #use finite solver to see if the assignment is good so far.
             maxRight = (0,0)
@@ -82,10 +84,14 @@ class CSP:
                  if nodes[idx][0] > maxRight[0] and nodes[idx][1] == 0:
                      maxRight = nodes[idx]
                      maxIdx = idx
-            fixedNodes = [(nodes.index[(0,0)], idx)]
+            fixedNodes = [nodes.index((0,0)), idx]
+            print("Nodes:{}".format(nodes))
+            print("Fixed nodes:{}".format(fixedNodes))
+            print("Connections:{}".format(connections))
+            print(("Forces:{}".format(forces)))
             system = System(modulus=70e9, area=3e-4, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections, forces=forces)
             solutions = system.computeDisplacements()
-
+            print(solutions)
             thresholdDisplacement = 0.01
             validAssignment = not(abs(max(solutions)) > thresholdDisplacement or abs(min(solutions)) > thresholdDisplacement)
             return validAssignment
