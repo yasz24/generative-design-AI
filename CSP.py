@@ -85,7 +85,7 @@ class CSP:
             fixedNodes = [(nodes.index[(0,0)], idx)]
             system = System(modulus=70e9, area=3e-4, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections, forces=forces)
             solutions = system.computeDisplacements()
-
+            print(solutions)
             thresholdDisplacement = 0.01
             validAssignment = not(abs(max(solutions)) > thresholdDisplacement or abs(min(solutions)) > thresholdDisplacement)
             return validAssignment

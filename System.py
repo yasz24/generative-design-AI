@@ -130,12 +130,12 @@ class System:
             kglobal = numpy.delete(kglobal, (pos), axis=1)
             forces = numpy.delete(forces, (pos), axis=0)
 
+        zeroColumns = numpy.all(numpy.abs(kglobal) < 1e-5, axis=0)
         zeroRows = numpy.all(numpy.abs(kglobal) < 1e-5, axis=1)
 
         kglobal = kglobal[:, ~numpy.all(numpy.abs(kglobal) < 1e-5, axis=0)]
         kglobal = kglobal[~numpy.all(numpy.abs(kglobal) < 1e-5, axis=1)]
 
-        kglobalidx = 0
         removed = copy.deepcopy(removed_one)
         removed.reverse()
 
@@ -143,6 +143,10 @@ class System:
             if zeroRows[row]:
                 forces = numpy.delete(forces, (row))
                 removed_one.append(row)
+        for col in range(len(zeroColumns)):
+            if zeroCols[col]:
+                force = numpy.degrees(force, (col))
+                removed_one.append(col)
 
         return kglobal, forces, removed_one
 

@@ -21,15 +21,18 @@ def recursiveBackTrackingSearch(assignment, variables, domains, constraints):
 			assignment[next_var] = next_val
 			old_domains = copy.deepcopy(domains)
 			if validAssignment(assignment, constraints):
-				print("validAssignment")
-				print("next_val{}".format(next_val))
+				#print("validAssignment")
+				#print("next_val{}".format(next_val))
 				updateDomains(assignment, variables, domains, next_val)
 				if noEmptyDomain(domains):
-					print("here")
+					#print("here")
 					result = recursiveBackTrackingSearch(assignment, variables, domains, constraints)
 					if result is not None:
 						return result
 			del assignment[next_var]
+			print("next_val{}".format(next_val))
+			print ("backtracked")
+
 			domains = old_domains
 	return None
 
@@ -52,7 +55,6 @@ def validAssignment(assignment, constraints):
 
 
 def updateDomains(assignment, variables, domains, next_val):
-    print("********domains{}".format(domains))
     var_for_domain_update = chooseVariable(assignment, variables)
     if var_for_domain_update == None:
         return
