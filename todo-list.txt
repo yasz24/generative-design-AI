@@ -1,0 +1,8 @@
+- Fix check constraints so that more than one beam is not given the exact same set of coordinates as an assignment. Yash
+- Fix Singular Matrix Error. Anthony
+- Look into linear regression. See if any open source frameworks can be used.  
+- Features
+	-We are trying out are maximum displacement in a structure, the difference between the number of points on the right half of the structure versus the left half, the total length of the beams, the maximum length of any beam in the structure, and average angle size between the beams in the structure.  
+
+- Data Collection 
+- Schema for data
