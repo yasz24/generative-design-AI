@@ -8,31 +8,32 @@ def backtrackingSearch(csp):
 
 
 def recursiveBackTrackingSearch(assignment, variables, domains, constraints):
-	if assignmentComplete(assignment, variables):
-		return assignment
-
-	next_var = chooseVariable(assignment, variables)
+    if assignmentComplete(assignment, variables):
+        return assignment
+    next_var = chooseVariable(assignment, variables)
 	#best approach probably to merge items in each domain list.
-	for domainList in domains[next_var]:
-		#could do an argmax here to make the best possible assignment/ q-learning here
-		#can also randomize values picked here, as well as the domainList picked.
-		shuffle(domainList)
-		for next_val in domainList:
-			assignment[next_var] = next_val
-			old_domains = copy.deepcopy(domains)
-			if validAssignment(assignment, constraints):
-				print("*********validAssignment next_val{}".format(next_val))
-				#print("next_val{}".format(next_val))
-				updateDomains(assignment, variables, domains, next_val)
-				if noEmptyDomain(domains):
-					result = recursiveBackTrackingSearch(assignment, variables, domains, constraints)
-					if result is not None:
-						return result
-			del assignment[next_var]
-			print("****backtracked next_val{}, next_var{}".format(next_val, next_var))
+    for domainList in domains[next_var]:
+        #could do an argmax here to make the best possible assignment/ q-learning here
+        #can also randomize values picked here, as well as the domainList picked.
+        shuffle(domainList)
+        for next_val in domainList:
+            assignment[next_var] = next_val
+            print("****************next_val********************")
+            print(next_val)
+            old_domains = copy.deepcopy(domains)
+            if validAssignment(assignment, constraints):
+                print("*********validAssignment next_val{}".format(next_val))
+                #print("next_val{}".format(next_val))
+                updateDomains(assignment, variables, domains, next_val)
+                if noEmptyDomain(domains):
+                    result = recursiveBackTrackingSearch(assignment, variables, domains, constraints)
+                    if result is not None:
+                        return result
+            del assignment[next_var]
+            print("****backtracked next_val{}, next_var{}".format(next_val, next_var))
 
-			domains = old_domains
-	return None
+            domains = old_domains
+    return None
 
 def assignmentComplete(assignment, variables):
     for var in variables:
