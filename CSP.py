@@ -76,7 +76,7 @@ class CSP:
                 connections.append((nodes.index(nodeA), nodes.index(nodeB)))
 
             # uniformly distribute the load
-            loadPerNode = 1000
+            loadPerNode = 1
             forces = []
             for idx in range(len(nodes)):
                 forces.append(Force(-1 * loadPerNode, 'y', idx))
@@ -93,11 +93,12 @@ class CSP:
             print("Fixed nodes:{}".format(fixedNodes))
             print("Connections:{}".format(connections))
             print(("Forces:{}".format(forces)))
-            system = System(modulus=70e9, area=3e-4, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections, forces=forces)
+            system = System(modulus=7500, area=0.005, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections, forces=forces)
             solutions = system.computeDisplacements()
             print(solutions)
-            thresholdDisplacement = 0.01
+            thresholdDisplacement = 10000
             validAssignment = not(abs(max(solutions)) > thresholdDisplacement or abs(min(solutions)) > thresholdDisplacement)
+            print(validAssignment)
             return validAssignment
         else:
             return False

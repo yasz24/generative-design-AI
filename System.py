@@ -92,7 +92,7 @@ class System:
                 theta = -(math.pi/2)
             else:
                 theta = math.atan((By - Ay) / (Bx - Ax))
-            k = ((self.modulus * self.area) / length) * numpy.array([[pow(math.cos(theta), 2), math.cos(theta)
+            k = ((self.modulus * self.area) / pow(length,3)) * numpy.array([[pow(math.cos(theta), 2), math.cos(theta)
                                                                       * math.sin(theta), -1 * pow(math.cos(theta), 2),
                               -1 * math.cos(theta) * math.sin(theta)],
                              [math.cos(theta) * math.sin(theta), pow(math.sin(theta), 2),
@@ -102,7 +102,7 @@ class System:
                               pow(math.cos(theta), 2),
                               math.cos(theta) * math.sin(theta)],
                              [-1 * math.cos(theta) * math.sin(theta), -1 * pow(math.sin(theta), 2),
-                              math.cos(theta) * math.sin(theta), pow(math.sin(theta), 2)]])
+                              math.cos(theta) * math.sin(theta), pow(math.sin(theta), 2)]], dtype=numpy.float64)
             indexes = [2 * nodeA, 2 * nodeA + 1, 2 * nodeB, 2 * nodeB + 1]
             inputData = [indexes, indexes]
             positions = list(itertools.product(*inputData))
@@ -130,7 +130,7 @@ class System:
             kglobal = numpy.delete(kglobal, (pos), axis=1)
             forces = numpy.delete(forces, (pos), axis=0)
 
-        zeroColumns = numpy.all(numpy.abs(kglobal) < 1e-5, axis=0)
+        zeroCols = numpy.all(numpy.abs(kglobal) < 1e-5, axis=0)
         zeroRows = numpy.all(numpy.abs(kglobal) < 1e-5, axis=1)
 
         kglobal = kglobal[:, ~numpy.all(numpy.abs(kglobal) < 1e-5, axis=0)]
@@ -143,7 +143,7 @@ class System:
             if zeroRows[row]:
                 forces = numpy.delete(forces, (row))
                 removed_one.append(row)
-        for col in range(len(zeroColumns)):
+        for col in range(len(zeroCols)):
             if zeroCols[col]:
                 force = numpy.degrees(force, (col))
                 removed_one.append(col)
@@ -156,9 +156,11 @@ class System:
         :return: Returns the displacement of each node in the x and y coordinates
         """
         kglobal, forces, removed_one = self.applyBoundaryConditions()
-        print( removed_one)
         allDisplacements = numpy.zeros(len(self.nodes) * 2)
-        displacements = numpy.matmul(numpy.linalg.inv(kglobal), forces)
+        a = kglobal
+        print("*********Matrix************")
+        print(a)
+        displacements = numpy.matmul(numpy.linalg.inv(a), forces)
         i = 0
         for idx in range(len(allDisplacements)):
             if idx in removed_one:
@@ -184,7 +186,7 @@ class System:
             localDisplacements = numpy.array([globalDisplacements[2 * nodeA],
                                               globalDisplacements[2*nodeA+1],
                                               globalDisplacements[2*nodeB],
-                                              globalDisplacements[2*nodeB+1]])
+                                              globalDisplacements[2*nodeB+1]], dtype=numpy.float64)
         length = math.sqrt((math.pow(Ax - Bx, 2) + math.pow(Ay - By, 2)))
         theta = math.radians(math.atan(By - Ay / (Bx - Ax)))
         stresses.append(self.modulus * numpy.matmul(numpy.matmul(numpy.array([-1/length, 1/length]),
@@ -194,6 +196,6 @@ class System:
 
 
 
-# s = System(modulus=70e9, area=3e-4, nodes=[(3.46410161514,0),(1.73205080757,-1),(1.7320508757,0),(0,0),(0,1)],
-#            fixedNodes=[3,4], connectivity=[(0,1),(0,2),(1,2),(1,3),(2,3),(2,4),(3,4)], forces=[Force(-5000,'y',0)])
-# print(s.computeDisplacements())
+s = System(modulus=70e9, area=3e-4, nodes=[(3.46410161514,0),(1.73205080757,-1),(1.7320508757,0),(0,0),(0,1)],
+            fixedNodes=[3,4], connectivity=[(0,1),(0,2),(1,2),(1,3),(2,3),(2,4),(3,4)], forces=[Force(-5000,'y',0)])
+#print(s.computeDisplacements())
