@@ -86,7 +86,7 @@ class CSP:
             loadPerNode = 1
             forces = []
             for idx in range(len(nodes)):
-                forces.append(Force(-1 * loadPerNode, 'y', idx))
+                forces.append(Force(-1 * loadPerNode, 'x', idx))
 
             #use finite solver to see if the assignment is good so far.
             maxRight = (0,0)

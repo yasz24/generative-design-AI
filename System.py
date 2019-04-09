@@ -228,6 +228,6 @@ class System:
 
 
 
-s = System(modulus=70e9, area=3e-4, nodes=[(3.46410161514,0),(1.73205080757,-1),(1.7320508757,0),(0,0),(0,1)],
-            fixedNodes=[3,4], connectivity=[(0,1),(0,2),(1,2),(1,3),(2,3),(2,4),(3,4)], forces=[Force(-5000,'y',0)])
+s = System(modulus=200e9, area=4e-4, nodes=[(0,0),(3,0),(6,0)],
+            fixedNodes=[0,2], connectivity=[(0,1),(1,2)], forces=[Force(-10000,'x',1), Force(10000,'y', 1)])
 print(s.computeDisplacements())
