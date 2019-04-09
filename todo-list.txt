@@ -1,4 +1,3 @@
-- Fix check constraints so that more than one beam is not given the exact same set of coordinates as an assignment. Yash
 - Fix Singular Matrix Error. Anthony
 - Look into linear regression. See if any open source frameworks can be used.  
 - Features
@@ -6,3 +5,4 @@
 
 - Data Collection 
 - Schema for data
+- modify domain to include points in space
