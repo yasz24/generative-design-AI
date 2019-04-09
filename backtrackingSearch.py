@@ -24,7 +24,7 @@ def recursiveBackTrackingSearch(assignment, variables, domains, constraints):
             assignment[next_var] = next_val
             print("****************next_val********************")
             print(next_val)
-            old_domains = copy.deepcopy(domains)
+            old_domains = createDeepCopy(domains)
             if validAssignment(assignment, constraints):
                 print("*********validAssignment next_val{}".format(next_val))
                 #print("next_val{}".format(next_val))
@@ -81,6 +81,18 @@ def noEmptyDomain(domains):
             # print("returning False")
             return False
     return True
+
+def createDeepCopy(domains):
+    newDomain = {}
+    for key in domains:
+        newValue = []
+        value = domains[key]
+        for domainList in value:
+            newDomainList = []
+            for domain in domainList:
+                newDomainList.append(domain)
+            newValue.append(newDomainList)
+        newDomain[key] = newValue
 
 
 csp = CSP(5, 0)
