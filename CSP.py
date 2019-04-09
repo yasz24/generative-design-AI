@@ -24,7 +24,9 @@ class CSP:
         #array for beam0
         array1 = []
         for i in range(grid_size):
-            array1.append((startPos, (i,grid_size-1)))
+            for j in range(grid_size):
+                if not ((i ==0) and (j==0)): 
+                    array1.append((startPos, (i, j)))
         domains["beam0"] = [array1]
 
         curBeam = 1
@@ -44,16 +46,21 @@ class CSP:
                 temp = []
                 if top:
                     for i in range(grid_size):
-                        temp.append((startPosition, (i, grid_size-1)))
+                        for j in range(grid_size):
+                            if not (i, j) == startPosition: 
+                                temp.append((startPosition, (i, j)))
                 else:
                     for i in range(grid_size):
-                        temp.append((startPosition, (i, 0)))
+                        for j in range(grid_size):
+                            if not (i, j) == startPosition: 
+                                temp.append((startPosition, (i, j)))
                 newMapValue.append(temp)
             top = not top
             curBeam+=1
         return domains
 
     def checkConstraints(self, assignment):
+        return True
         print("assignment:{}".format(assignment))
         #code to make sure no to beams are the same.
         assignmentTups = []
@@ -117,5 +124,11 @@ class CSP:
  
 
 
-csp = CSP(5, 0)
+csp = CSP(3, 0)
+# total = 0
+# for domainList in csp.domains["beam1"]:
+#     for domain in domainList:
+#         total+=1
+
+
 
