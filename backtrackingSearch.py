@@ -1,6 +1,7 @@
 import copy
 from CSP import *
 from random import shuffle
+from graphics import *
 
 
 def backtrackingSearch(csp):
@@ -89,8 +90,12 @@ def createDeepCopy(domains):
                 newDomainList.append(domain)
             newValue.append(newDomainList)
         newDomain[key] = newValue
+    return newDomain
 
 
-csp = CSP(5, 0)
+csp = CSP(4, 0)
 #print(csp.domains)
-print(backtrackingSearch(csp))
+assignment = backtrackingSearch(csp)
+print(assignment)
+StructureVisual().drawStructure(assignment)
+

@@ -60,7 +60,6 @@ class CSP:
         return domains
 
     def checkConstraints(self, assignment):
-        return True
         print("assignment:{}".format(assignment))
         #code to make sure no to beams are the same.
         assignmentTups = []
@@ -83,7 +82,7 @@ class CSP:
                 connections.append((nodes.index(nodeA), nodes.index(nodeB)))
 
             # uniformly distribute the load
-            loadPerNode = 1
+            loadPerNode = 10000
             forces = []
             for idx in range(len(nodes)):
                 forces.append(Force(-1 * loadPerNode, 'y', idx))
@@ -100,10 +99,10 @@ class CSP:
             print("Fixed nodes:{}".format(fixedNodes))
             print("Connections:{}".format(connections))
             print(("Forces:{}".format(forces)))
-            system = System(modulus=7500, area=0.005, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections, forces=forces)
+            system = System(modulus=200e9, area=0.001, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections, forces=forces)
             solutions = system.computeDisplacements()
             print(solutions)
-            thresholdDisplacement = 10000
+            thresholdDisplacement = 0.1
             validAssignment = not(abs(max(solutions)) > thresholdDisplacement or abs(min(solutions)) > thresholdDisplacement)
             print(validAssignment)
             return validAssignment
