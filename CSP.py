@@ -86,6 +86,7 @@ class CSP:
             loads = []
             for idx in range(len(nodes)):
                 loads.append(Load(-1 * loadPerNode, 'f', idx))
+                loads.append(Load(loadPerNode/4, 'm', idx))
 
             #use finite solver to see if the assignment is good so far.
             maxRight = (0,0)
@@ -94,7 +95,9 @@ class CSP:
                  if nodes[idx][0] > maxRight[0] and nodes[idx][1] == 0:
                      maxRight = nodes[idx]
                      maxIdx = idx
-            fixedNodes = [nodes.index((0,0)), idx]
+            if maxIdx == 0:
+                maxIdx = idx
+            fixedNodes = [nodes.index((0,0)), maxIdx]
             print("Nodes:{}".format(nodes))
             print("Fixed nodes:{}".format(fixedNodes))
             print("Connections:{}".format(connections))
