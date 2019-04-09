@@ -105,7 +105,7 @@ class CSP:
             system = System(modulus=200e9, area=0.06928, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections, loads=loads)
             solutions = system.computeDisplacements()
             print(solutions)
-            thresholdDisplacement = 0.0001
+            thresholdDisplacement = 0.01
             validAssignment = not(abs(max(solutions)) > thresholdDisplacement or abs(min(solutions)) > thresholdDisplacement)
             print(validAssignment)
             return validAssignment
@@ -126,7 +126,8 @@ class CSP:
  
 
 
-csp = CSP(3, 0)
+
+
 # total = 0
 # for domainList in csp.domains["beam1"]:
 #     for domain in domainList:
