@@ -1,4 +1,4 @@
-from Force import Force
+from Force import Load
 from System import System
 
 class CSP:
@@ -83,9 +83,9 @@ class CSP:
 
             # uniformly distribute the load
             loadPerNode = 10000
-            forces = []
+            loads = []
             for idx in range(len(nodes)):
-                forces.append(Force(-1 * loadPerNode, 'x', idx))
+                loads.append(Load(-1 * loadPerNode, 'f', idx))
 
             #use finite solver to see if the assignment is good so far.
             maxRight = (0,0)
@@ -98,11 +98,11 @@ class CSP:
             print("Nodes:{}".format(nodes))
             print("Fixed nodes:{}".format(fixedNodes))
             print("Connections:{}".format(connections))
-            print(("Forces:{}".format(forces)))
-            system = System(modulus=200e9, area=0.06928, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections, forces=forces)
+            print(("Loads:{}".format(loads)))
+            system = System(modulus=200e9, area=0.06928, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections, loads=loads)
             solutions = system.computeDisplacements()
             print(solutions)
-            thresholdDisplacement = 0.1
+            thresholdDisplacement = 0.0001
             validAssignment = not(abs(max(solutions)) > thresholdDisplacement or abs(min(solutions)) > thresholdDisplacement)
             print(validAssignment)
             return validAssignment

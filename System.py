@@ -2,44 +2,44 @@ import numpy
 import math
 import itertools
 import copy
-from Force import Force
+from Force import Load
 
 class System:
 
-    def __init__(self, modulus, area, nodes, fixedNodes, connectivity, forces):
+    def __init__(self, modulus, area, nodes, fixedNodes, connectivity, loads):
         """
         :param modulus: Modulus of the elements
         :param area: Area of the elements
         :param nodes: List of the nodes in the system
         :param fixedNodes: List of numbers of nodes that are fixed in the system
         :param connectivity: List of pairs of position
-        :param forces: List of the Forces on the system
+        :param loads: List of the loads on the system
         :param displacements: the displacements of the nodes
         """
         self.nodes = nodes
         self.fixedNodes = fixedNodes
-        self.forces = numpy.zeros((len(self.nodes) * 2, 1))
-        self.addForces(forces)
+        self.loads = numpy.zeros((len(self.nodes) * 2, 1))
+        self.addloads(loads)
         self.kglobal = numpy.zeros((len(self.nodes) * 2, len(self.nodes) * 2))
         self.connectivity = connectivity
         self.modulus = modulus
         self.area = area
         self.assemble()
 
-    def addForces(self, forces):
+    def addloads(self, loads):
         """
-        Adds a force to the system
-        :param forces: A Force object
+        Adds a load to the system
+        :param loads: A load object
         :return: Void
         """
-        self.forces = numpy.zeros((len(self.nodes) * 2, 1))
-        for force in forces:
-            if force.getDirection() == 'x':
-                self.forces[2 * force.getNode()] += force.getMagnitude()
-            elif force.getDirection() == 'y':
-                self.forces[2 * force.getNode() + 1] += force.getMagnitude()
+        self.loads = numpy.zeros((len(self.nodes) * 2, 1))
+        for load in loads:
+            if load.getDirection() == 'f':
+                self.loads[2 * load.getNode()] += load.getMagnitude()
+            elif load.getDirection() == 'm':
+                self.loads[2 * load.getNode() + 1] += load.getMagnitude()
             else:
-                raise Exception('Direction of force no in coordinate system')
+                raise Exception('Direction of load no in coordinate system')
 
     def addNode(self, number, pos):
         """
@@ -148,11 +148,11 @@ class System:
     def applyBoundaryConditions(self):
         """
         Uses the information about the boundary conditions to remove
-        variables from the equations relating displacement to force
+        variables from the equations relating displacement to load
         :return: Void
         """
         kglobal = copy.deepcopy(self.kglobal)
-        forces = copy.deepcopy(self.forces)
+        loads = copy.deepcopy(self.loads)
         removed_one = []
         for i in range(len(self.fixedNodes)):
             removed_one.append(self.fixedNodes[i] * 2)
@@ -162,7 +162,7 @@ class System:
         for pos in removed_one:
             kglobal = numpy.delete(kglobal, (pos), axis=0)
             kglobal = numpy.delete(kglobal, (pos), axis=1)
-            forces = numpy.delete(forces, (pos), axis=0)
+            loads = numpy.delete(loads, (pos), axis=0)
 
         zeroCols = numpy.all(numpy.abs(kglobal) < 1e-5, axis=0)
         zeroRows = numpy.all(numpy.abs(kglobal) < 1e-5, axis=1)
@@ -175,24 +175,24 @@ class System:
 
         for row in range(len(zeroRows)):
             if zeroRows[row]:
-                forces = numpy.delete(forces, (row))
+                loads = numpy.delete(loads, (row))
                 removed_one.append(row)
         for col in range(len(zeroCols)):
             if zeroCols[col]:
-                force = numpy.degrees(force, (col))
+                load = numpy.degrees(load, (col))
                 removed_one.append(col)
 
-        return kglobal, forces, removed_one
+        return kglobal, loads, removed_one
 
     def computeDisplacements(self):
         """
         Solves the system using the given parameters
         :return: Returns the displacement of each node in the x and y coordinates
         """
-        kglobal, forces, removed_one = self.applyBoundaryConditions()
+        kglobal, loads, removed_one = self.applyBoundaryConditions()
         allDisplacements = numpy.zeros(len(self.nodes) * 2)
         a = kglobal
-        displacements = numpy.matmul(numpy.linalg.inv(a), forces)
+        displacements = numpy.matmul(numpy.linalg.inv(a), loads)
         i = 0
         for idx in range(len(allDisplacements)):
             if idx in removed_one:
@@ -230,5 +230,5 @@ class System:
 
 
 #s = System(modulus=200e9, area=4e-4, nodes=[(0,0),(3,0),(6,0)],
-#            fixedNodes=[0,2], connectivity=[(0,1),(1,2)], forces=[Force(-10000,'x',1), Force(10000,'y', 1)])
+#            fixedNodes=[0,2], connectivity=[(0,1),(1,2)], loads=[load(-10000,'x',1), load(10000,'y', 1)])
 #print(s.computeDisplacements())
