@@ -93,7 +93,7 @@ class System:
                                  12 * pow(math.cos(theta), 2) * length + math.sin(theta) * math.cos(theta) * (
                                              12 - 4 * pow(length, 2)) - 6 * length,
                                  pow(math.cos(theta), 2) * (-2 * pow(length, 2) - 12) + 2 * pow(length, 2),
-                                 math.sin(theta) * math.cos(theta) * (-2 * pow(length, 2)) + 6 * pow(length, 2)],
+                                 math.sin(theta) * math.cos(theta) * (-2 * pow(length, 2) - 12) + 6*length],
                                 [12 * pow(math.cos(theta), 2) * length + math.sin(theta) * math.cos(theta) * (
                                             12 - 4 * pow(length, 2)) - (6 * length),
                                  pow(math.cos(theta), 2) * (4 * pow(length, 2) - 12) + 12 * math.sin(theta) * math.cos(
@@ -106,7 +106,7 @@ class System:
                                      theta) * length + 4 * pow(length, 2),
                                  -12 * pow(math.cos(theta), 2) * length + math.sin(theta) * math.cos(theta) * (
                                              12 - 4 * pow(length, 2)) + (6 * length)],
-                                [math.sin(theta) * math.cos(theta) * (-2 * pow(length, 2)) + (6 * length),
+                                [math.sin(theta) * math.cos(theta) * (-2 * pow(length, 2) - 12) + (6 * length),
                                  pow(math.cos(theta), 2) * (2 * pow(length, 2) + 12) - 12,
                                  -12 * pow(math.cos(theta), 2) * length + math.sin(theta) * math.cos(theta) * (
                                              12 - 4 * pow(length, 2)) + (6 * length),

@@ -3,6 +3,10 @@ from CSP import *
 from random import shuffle
 
 
+import time
+start = time.time()
+"the code you want to test stays here"
+
 def backtrackingSearch(csp):
     return recursiveBackTrackingSearch({}, csp.variables, csp.domains, csp.constraints)
 
@@ -94,3 +98,6 @@ def createDeepCopy(domains):
 csp = CSP(5, 0)
 #print(csp.domains)
 print(backtrackingSearch(csp))
+
+end = time.time()
+print(end -start)
