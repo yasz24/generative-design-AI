@@ -4,6 +4,10 @@ from random import shuffle
 from graphics import *
 
 
+import time
+start = time.time()
+"the code you want to test stays here"
+
 def backtrackingSearch(csp):
     return recursiveBackTrackingSearch({}, csp.variables, csp.domains, csp.constraints)
 
@@ -95,6 +99,7 @@ def createDeepCopy(domains):
 
 csp = CSP(4, 0)
 #print(csp.domains)
+
 assignment = backtrackingSearch(csp)
 print(assignment)
 StructureVisual().drawStructure(assignment)
