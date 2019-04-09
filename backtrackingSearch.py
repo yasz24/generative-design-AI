@@ -97,7 +97,7 @@ def createDeepCopy(domains):
     return newDomain
 
 
-csp = CSP(4, 0)
+csp = CSP(6, 0)
 #print(csp.domains)
 
 assignment = backtrackingSearch(csp)
