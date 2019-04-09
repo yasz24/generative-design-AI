@@ -85,7 +85,7 @@ class CSP:
             loadPerNode = 10000
             forces = []
             for idx in range(len(nodes)):
-                forces.append(Force(-1 * loadPerNode, 'y', idx))
+                forces.append(Force(-1 * loadPerNode, 'x', idx))
 
             #use finite solver to see if the assignment is good so far.
             maxRight = (0,0)
@@ -99,7 +99,7 @@ class CSP:
             print("Fixed nodes:{}".format(fixedNodes))
             print("Connections:{}".format(connections))
             print(("Forces:{}".format(forces)))
-            system = System(modulus=200e9, area=0.001, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections, forces=forces)
+            system = System(modulus=200e9, area=0.06928, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections, forces=forces)
             solutions = system.computeDisplacements()
             print(solutions)
             thresholdDisplacement = 0.5
