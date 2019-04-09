@@ -13,5 +13,3 @@ class StructureVisual:
             self.turtle.penup()
         turtle.done()
 
-
-klocal =

@@ -69,6 +69,50 @@ class System:
         else:
             raise Exception('This node does not exist')
 
+    def localTruss(self, length, theta):
+        return ((self.modulus * self.area) / length) * numpy.array([[pow(math.cos(theta), 2), math.cos(theta)
+                                                                  * math.sin(theta), -1 * pow(math.cos(theta), 2),
+                                                                  -1 * math.cos(theta) * math.sin(theta)],
+                                                                 [math.cos(theta) * math.sin(theta),
+                                                                  pow(math.sin(theta), 2),
+                                                                  -1 * math.cos(theta) * math.sin(theta),
+                                                                  -1 * pow(math.sin(theta), 2)],
+                                                                 [-1 * pow(math.cos(theta), 2),
+                                                                  -1 * math.cos(theta) * math.sin(theta),
+                                                                  pow(math.cos(theta), 2),
+                                                                  math.cos(theta) * math.sin(theta)],
+                                                                 [-1 * math.cos(theta) * math.sin(theta),
+                                                                  -1 * pow(math.sin(theta), 2),
+                                                                  math.cos(theta) * math.sin(theta),
+                                                                  pow(math.sin(theta), 2)]], dtype=numpy.float64)
+    def localBeam(self, length, theta):
+        areaInertia = (1/12)*pow(self.area, 2)
+        return ((self.modulus * areaInertia) / pow(length, 3)) \
+                 * numpy.array([[pow(math.cos(theta), 2) * (12 - 4 * pow(length, 2)) - 12 * math.sin(theta) * math.cos(
+            theta) * length + 4 * pow(length, 2),
+                                 12 * pow(math.cos(theta), 2) * length + math.sin(theta) * math.cos(theta) * (
+                                             12 - 4 * pow(length, 2)) - 6 * length,
+                                 pow(math.cos(theta), 2) * (-2 * pow(length, 2) - 12) + 2 * pow(length, 2),
+                                 math.sin(theta) * math.cos(theta) * (-2 * pow(length, 2)) + 6 * pow(length, 2)],
+                                [12 * pow(math.cos(theta), 2) * length + math.sin(theta) * math.cos(theta) * (
+                                            12 - 4 * pow(length, 2)) - (6 * length),
+                                 pow(math.cos(theta), 2) * (4 * pow(length, 2) - 12) + 12 * math.sin(theta) * math.cos(
+                                     theta) * length + 12,
+                                 math.sin(theta) * math.cos(theta) * (-2 * pow(length, 2) - 12) - (6 * length),
+                                 pow(math.cos(theta), 2) * (2 * pow(length, 2) + 12) - 12],
+                                [pow(math.cos(theta), 2) * (-2 * pow(length, 2) - 12) + 2 * pow(length, 2),
+                                 math.sin(theta) * math.cos(theta) * (-2 * pow(length, 2) - 12) - (6 * length),
+                                 pow(math.cos(theta), 2) * (12 - 4 * pow(length, 2)) + 12 * math.sin(theta) * math.cos(
+                                     theta) * length + 4 * pow(length, 2),
+                                 -12 * pow(math.cos(theta), 2) * length + math.sin(theta) * math.cos(theta) * (
+                                             12 - 4 * pow(length, 2)) + (6 * length)],
+                                [math.sin(theta) * math.cos(theta) * (-2 * pow(length, 2)) + (6 * length),
+                                 pow(math.cos(theta), 2) * (2 * pow(length, 2) + 12) - 12,
+                                 -12 * pow(math.cos(theta), 2) * length + math.sin(theta) * math.cos(theta) * (
+                                             12 - 4 * pow(length, 2)) + (6 * length),
+                                 pow(math.cos(theta), 2) * (4 * pow(length, 2) - 12) - 12 * math.sin(theta) * math.cos(
+                                     theta) * length + 12]])
+
     def assemble(self):
         """
         Takes the information about the nodes in 3d space and the connevtivity of each node
@@ -92,17 +136,7 @@ class System:
                 theta = -(math.pi/2)
             else:
                 theta = math.atan((By - Ay) / (Bx - Ax))
-            k = ((self.modulus * self.area) / pow(length,3)) * numpy.array([[pow(math.cos(theta), 2), math.cos(theta)
-                                                                      * math.sin(theta), -1 * pow(math.cos(theta), 2),
-                              -1 * math.cos(theta) * math.sin(theta)],
-                             [math.cos(theta) * math.sin(theta), pow(math.sin(theta), 2),
-                              -1 * math.cos(theta) * math.sin(theta),
-                              -1 * pow(math.sin(theta), 2)],
-                             [-1 * pow(math.cos(theta), 2), -1 * math.cos(theta) * math.sin(theta),
-                              pow(math.cos(theta), 2),
-                              math.cos(theta) * math.sin(theta)],
-                             [-1 * math.cos(theta) * math.sin(theta), -1 * pow(math.sin(theta), 2),
-                              math.cos(theta) * math.sin(theta), pow(math.sin(theta), 2)]], dtype=numpy.float64)
+            k = self.localBeam(length, theta)
             indexes = [2 * nodeA, 2 * nodeA + 1, 2 * nodeB, 2 * nodeB + 1]
             inputData = [indexes, indexes]
             positions = list(itertools.product(*inputData))
@@ -158,8 +192,6 @@ class System:
         kglobal, forces, removed_one = self.applyBoundaryConditions()
         allDisplacements = numpy.zeros(len(self.nodes) * 2)
         a = kglobal
-        print("*********Matrix************")
-        print(a)
         displacements = numpy.matmul(numpy.linalg.inv(a), forces)
         i = 0
         for idx in range(len(allDisplacements)):
@@ -198,4 +230,4 @@ class System:
 
 s = System(modulus=70e9, area=3e-4, nodes=[(3.46410161514,0),(1.73205080757,-1),(1.7320508757,0),(0,0),(0,1)],
             fixedNodes=[3,4], connectivity=[(0,1),(0,2),(1,2),(1,3),(2,3),(2,4),(3,4)], forces=[Force(-5000,'y',0)])
-#print(s.computeDisplacements())
+print(s.computeDisplacements())
