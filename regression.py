@@ -9,7 +9,7 @@ class Regression:
         pass
 
     def targetMatrix(self, dataset):
-        pass 
+        pass
 
     def evaluate(self, theta, x):
         return sum([theta[i] * x[i] for i in range(len(x))])
