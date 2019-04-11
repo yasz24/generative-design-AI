@@ -30,23 +30,43 @@ class FeatureExtractorUtil:
     def averageAngle(self, structure):
         totalAngle = 0
         numAngles = 0
-        connections=[structure[key] for key in structure]
-        adjacentConnections = {}
-        for pair1 in connections:
-            for pair2 in connections:
-                if pair1[0] in pair2 or pair1[1] in pair2:
-                    adjacentConnections[pair1] += [pair2]
-        for start in adjacentConnections:
-            ends = adjacentConnections[start]
-            angleEnds = list(itertools.combinations(ends), 2)
+
+        #construct a graph from the structure
+        vertices = {}
+        for key in structure:
+            if not tuple(structure[key][0]) in vertices:
+                vertices[tuple(structure[key][0])] = []
+            
+            if not tuple(structure[key][1]) in vertices:
+                vertices[tuple(structure[key][1])] = []
+
+        for key in structure:
+            vertices[tuple(structure[key][0])].append([tuple(structure[key][0]), tuple(structure[key][1])])
+            vertices[tuple(structure[key][1])].append([tuple(structure[key][0]), tuple(structure[key][1])])
+
+        for vertex in vertices:
+            print("vertex {}".format(vertex))
+            edges = vertices[vertex]
+            print("edges {}".format(edges))
+            angleEnds = list(itertools.combinations(edges, 2))
+            print("angle ends {}".format(angleEnds))
             for pair in angleEnds:
-                vecA = 0
-                vecB = 0
-                magA = np.sqrt((pair[0][0]-start[0])**2+(pair[0][1]-start[0])**2)
-                magB = np.sqrt((pair[1][0]-start[0])**2+(pair[1][1]-start[0])**2)
+                if pair[0][0] == vertex:
+                    vecA = np.asarray(pair[0][1]) - np.asarray(vertex)
+                else:
+                    vecA = np.asarray(pair[0][0]) - np.asarray(vertex)
+                if pair[1][0] == vertex:
+                    vecB = np.asarray(pair[1][1]) - np.asarray(vertex)
+                else:
+                    vecB = np.asarray(pair[1][0]) - np.asarray(vertex)
+                magA = np.sqrt((vecA[0])**2+(vecA[1])**2)
+                magB = np.sqrt((vecB[0])**2+(vecB[1])**2)
                 totalAngle += np.arccos(np.dot(vecA,vecB)/(magA*magB))
                 numAngles += 1
+
+        totalAngle = totalAngle / 2 
         averageAngle = totalAngle / numAngles
+        print("averageAngle {}".format(averageAngle))
         return averageAngle
         
     def pointDistribution(self, structure):
@@ -67,8 +87,8 @@ class FeatureExtractorUtil:
 
     def computeSolution(self, structure):
         nodes = []
-        for key in assignment:
-            nodeA, nodeB = assignment[key]
+        for key in structure:
+            nodeA, nodeB = structure[key]
             if nodeA not in nodes:
                 nodes.append(nodeA)
             if nodeB not in nodes:

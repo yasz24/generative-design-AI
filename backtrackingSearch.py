@@ -10,6 +10,7 @@ start = time.time()
 "the code you want to test stays here"
 
 weights = lr(featureMatrix('Database.txt'),targetMatrix('Database.txt'))
+print(weights)
 
 def backtrackingSearch(csp):
     return recursiveBackTrackingSearch({}, csp.variables, csp.domains, csp.constraints)
@@ -107,7 +108,7 @@ def createDeepCopy(domains):
 csp = CSP(4, 0)
 #print(csp.domains)
 
-assignment = backtrackingSearch(csp)
-print(assignment)
-StructureVisual().drawStructure(assignment)
+#assignment = backtrackingSearch(csp)
+#print(assignment)
+#StructureVisual().drawStructure(assignment)
 
