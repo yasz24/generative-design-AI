@@ -1,22 +1,22 @@
 import numpy as np
 from featureExtractor import FeatureExtractorUtil
-import matlibplot
+import json
 
 
 def featureMatrix(dataSet):
     featureExtractor = FeatureExtractorUtil()
     data = [json.loads(line) for line in open(dataSet)]
-    self.features = [featureExtractor.extractFeatures(structure) for structure in data]
+    return [featureExtractor.extractFeatures(structure) for structure in data]
 
 def targetMatrix(dataSet):
     targetExtractor = FeatureExtractorUtil()
     data = [json.loads(line) for line in open(dataSet)]
-    self.features = [targetExtractor.extractTargets(structure) for structure in data]
+    return [targetExtractor.extractTargets(structure) for structure in data]
 
 def evaluate(theta, x):
     return sum([theta[i] * x[i] for i in range(len(x))])
 
-def lr(features, targets, N = 1000, alpha = 0.01):
+def lr(features, targets, N = 10000, alpha = 0.001):
     theta = [0]*len(features[0])
     for k in range(N):
         i = k % len(features)
