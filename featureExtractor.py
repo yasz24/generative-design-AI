@@ -3,6 +3,7 @@ from System import System
 from Force import Load
 import itertools
 import json
+from graphics import *
 
 class FeatureExtractorUtil:
 
@@ -39,8 +40,8 @@ class FeatureExtractorUtil:
             ends = adjacentConnections[start]
             angleEnds = list(itertools.combinations(ends), 2)
             for pair in angleEnds:
-                vecA = np.asarray(pair[0]) - np.asarray(start)
-                vecB = np.asarray(pair[1]) - np.asarray(start)
+                vecA = 0
+                vecB = 0
                 magA = np.sqrt((pair[0][0]-start[0])**2+(pair[0][1]-start[0])**2)
                 magB = np.sqrt((pair[1][0]-start[0])**2+(pair[1][1]-start[0])**2)
                 totalAngle += np.arccos(np.dot(vecA,vecB)/(magA*magB))
@@ -50,7 +51,15 @@ class FeatureExtractorUtil:
         
     def pointDistribution(self, structure):
         minX = 0
-        points = [structure[key][0] for key in structure] + [structure[key][1] for key in structure]
+        points = []
+        for key in structure:
+            point1 = structure[key][0]
+            point2 = structure[key][1]
+            if point1 not in points:
+                points.append(point1)
+            if point2 not in points:
+                points.append(point2)
+
         maxX = max([pos[0] for pos in points])
         center = (maxX-minX)/2
         difference = abs(sum(pos[0] > center for pos in points) - sum(pos[0] < center for pos in points))
@@ -66,7 +75,7 @@ class FeatureExtractorUtil:
                 nodes.append(nodeB)
         connections = [(nodes.index(structure[key][0]), nodes.index(structure[key][1])) for key in structure]
         nodeLoad = 10000
-        loads = [Load(-1 * nodeLoad, 'f', idx) for idx in range(len(nodes))]
+        loads = [Load(-1 * nodeLoad, 'y', idx) for idx in range(len(nodes))]
         maxRight = (0, 0)
         maxIdx = 0
         for idx in range(len(nodes)):
@@ -76,7 +85,7 @@ class FeatureExtractorUtil:
         if maxIdx == 0:
             maxIdx = idx
         fixedNodes = [nodes.index((0, 0)), maxIdx]
-        system = System(modulus=200e9, area=0.06928, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections,
+        system = System(modulus=30e6, area=10, inertia=100, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections,
                         loads=loads)
         return system.computeDisplacements()
 
@@ -87,5 +96,6 @@ class FeatureExtractorUtil:
     def maxDisplacement(self, structure):
         return max(self.computeSolution(structure))
 
+beam = {"beam0": [[0, 0], [4, 0]], "beam1": [[0, 0], [4, 4]], "beam2": [[4, 2], [4, 2]]}
 f = FeatureExtractorUtil()
-
+#StructureVisual().drawStructure(beam)

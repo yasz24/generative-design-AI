@@ -1,6 +1,6 @@
 import numpy as np
 from featureExtractor import FeatureExtractorUtil
-import matlibplot
+import json
 
 
 def featureMatrix(dataSet):
