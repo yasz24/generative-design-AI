@@ -6,7 +6,7 @@ import json
 
 class FeatureExtractorUtil:
 
-    def __init__(self   ):
+    def __init__(self):
        pass
 
     def extractFeatures(self, structure):
@@ -87,5 +87,5 @@ class FeatureExtractorUtil:
     def maxDisplacement(self, structure):
         return max(self.computeSolution(structure))
 
-f = FeatureExtractorUtil('Database.txt')
+f = FeatureExtractorUtil()
 

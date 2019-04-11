@@ -2,11 +2,14 @@ import copy
 from CSP import *
 from random import shuffle
 from graphics import *
-
+from featureExtractor import *
+from regression import *
 
 import time
 start = time.time()
 "the code you want to test stays here"
+
+weights = lr(featureMatrix('Database.txt'),targetMatrix('Database.txt'))
 
 def backtrackingSearch(csp):
     return recursiveBackTrackingSearch({}, csp.variables, csp.domains, csp.constraints)
@@ -19,6 +22,10 @@ def recursiveBackTrackingSearch(assignment, variables, domains, constraints):
 	#best approach probably to merge items in each domain list.
     for domainList in domains[next_var]:
         #could do an argmax here to make the best possible assignment/ q-learning here
+        """Some sort of regression choosing should go here"""
+        """*************************************"""
+        hypothesis = evaluate(weights, FeatureExtractorUtil().extractFeatures(assignment))
+        """*************************************"""
         #can also randomize values picked here, as well as the domainList picked.
         shuffle(domainList)
         for next_val in domainList:
