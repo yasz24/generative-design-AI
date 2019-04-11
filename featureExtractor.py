@@ -2,14 +2,22 @@ import numpy as np
 from System import System
 from Force import Load
 import itertools
+import json
 
 class FeatureExtractorUtil:
 
-    def __init__(self):
-        pass
+    def __init__(self, databaseFile):
+        with open(databaseFile) as json_file:
+            data = json.load(json_file)
+
 
     def extractFeatures(self, structure):
-	    totalLength = totalLengthFeature(structure)
+        features = [self.totalLengthFeature(structure),
+                    self.averageAngle(structure),
+                    self.pointDistribution(structure),
+                    self.averageDisplacement(structure),
+                    self.maxDisplacement(structure)]
+        return features
 
     def totalLengthFeature(self, structure):
         totalLength = 0
@@ -19,7 +27,6 @@ class FeatureExtractorUtil:
         return totalLength
 
     def averageAngle(self, structure):
-        averageAngle = 0
         totalAngle = 0
         numAngles = 0
         connections=[structure[key] for key in structure]
@@ -39,6 +46,7 @@ class FeatureExtractorUtil:
                 totalAngle += np.arccos(np.dot(vecA,vecB)/(magA*magB))
                 numAngles += 1
         averageAngle = totalAngle / numAngles
+        return averageAngle
         
     def pointDistribution(self, structure):
         minX = 0
@@ -79,5 +87,5 @@ class FeatureExtractorUtil:
     def maxDisplacement(self, structure):
         return max(self.computeSolution(structure))
 
-
+f = FeatureExtractorUtil('Database.txt')
 

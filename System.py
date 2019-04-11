@@ -245,6 +245,6 @@ class System:
 
 
 
-s = System(modulus=30e9, area=10, inertia=100, nodes=[(0,0),(0,120),(120,120),(120,0)],
-            fixedNodes=[0,3], connectivity=[(0,1),(1,2),(2,3)], loads=[Load(10000,'x',1)])
-print(s.computeDisplacements())
+#s = System(modulus=30e9, area=10, inertia=100, nodes=[(0,0),(0,120),(120,120),(120,0)],
+#            fixedNodes=[0,3], connectivity=[(0,1),(1,2),(2,3)], loads=[Load(10000,'x',1)])
+#print(s.computeDisplacements())
