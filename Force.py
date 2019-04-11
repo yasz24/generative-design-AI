@@ -1,16 +1,16 @@
 
 
 class Load:
-    def __init__(self, magnitude, type, node):
+    def __init__(self, magnitude, direction, node):
         self.magnitude = magnitude
-        self.type = type
+        self.direction = direction
         self.node = node
 
     def getNode(self):
         return self.node
 
     def getDirection(self):
-        return self.type
+        return self.direction
 
     def getMagnitude(self):
         return self.magnitude
