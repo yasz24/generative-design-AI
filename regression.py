@@ -1,15 +1,20 @@
 import numpy as np
-import featureExtractor
+from featureExtractor import FeatureExtractorUtil
 
 class Regression:
     def __init__(self):
-        pass
+        self.features = []
+        self.targets = []
 
-    def featureMatrix(self,dataSet):
-        pass
+    def featureMatrix(self, dataSet):
+        featureExtractor = FeatureExtractorUtil()
+        data = [json.loads(line) for line in open(dataSet)]
+        self.features = [featureExtractor.extractFeatures(structure) for structure in data]
 
-    def targetMatrix(self, dataset):
-        pass
+    def targetMatrix(self, dataSet):
+        targetExtractor = FeatureExtractorUtil()
+        data = [json.loads(line) for line in open(dataSet)]
+        self.features = [targetExtractor.extractTargets(structure) for structure in data]
 
     def evaluate(self, theta, x):
         return sum([theta[i] * x[i] for i in range(len(x))])

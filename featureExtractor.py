@@ -6,18 +6,18 @@ import json
 
 class FeatureExtractorUtil:
 
-    def __init__(self, databaseFile):
-        with open(databaseFile) as json_file:
-            data = json.load(json_file)
-
+    def __init__(self   ):
+       pass
 
     def extractFeatures(self, structure):
         features = [self.totalLengthFeature(structure),
                     self.averageAngle(structure),
                     self.pointDistribution(structure),
-                    self.averageDisplacement(structure),
-                    self.maxDisplacement(structure)]
+                    self.averageDisplacement(structure)]
         return features
+
+    def extractTargets(self, structure):
+        return self.maxDisplacement(structure)
 
     def totalLengthFeature(self, structure):
         totalLength = 0
