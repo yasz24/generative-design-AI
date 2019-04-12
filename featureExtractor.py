@@ -67,25 +67,17 @@ class FeatureExtractorUtil:
 
         totalAngle = totalAngle / 2 
         averageAngle = totalAngle / numAngles
-<<<<<<< HEAD
-        #print("averageAngle {}".format(averageAngle))
-=======
+
         averageAngle = math.degrees(averageAngle)
         print("averageAngle {}".format(averageAngle))
->>>>>>> master
         return averageAngle
         
     def pointDistribution(self, structure):
         minX = 0
         points = []
         for key in structure:
-            point1 = structure[key][0]
-            point2 = structure[key][1]
-            if point1 not in points:
-                points.append(point1)
-            if point2 not in points:
-                points.append(point2)
-
+            points.append(structure[key][0])
+            points.append(structure[key][1])
         maxX = max([pos[0] for pos in points])
         center = (maxX-minX)/2
         difference = abs(sum(pos[0] > center for pos in points) - sum(pos[0] < center for pos in points))

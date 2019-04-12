@@ -22,13 +22,12 @@ def targetMatrix(dataSet):
     return [targetExtractor.extractTargets(structure) for structure in data]
 
 def evaluate(theta, x):
-    print(sum([theta[i] * x[i] for i in range(len(x))]))
     return sum([theta[i] * x[i] for i in range(len(x))])
 
-ef lr(features, targets, N = 100, alpha = 0.01):
+def lr(features, targets, N = 100, alpha = 0.01):
+    theta = [0] * len(features[0])
     for k in range(N):
         i = k % len(features)
-        print(i)
         h = evaluate(theta, features[i])
         print("targets {}".format(targets))
         print("i {} hypothesis {}".format(i, h))
@@ -37,7 +36,18 @@ ef lr(features, targets, N = 100, alpha = 0.01):
             theta[j] -= alpha * error * features[i][j]
     return theta
 
-feature = []
+def normalEquations(features, targets):
+    print(np.matmul(np.transpose(features), features))
+    X = np.linalg.inv(np.matmul(np.transpose(features), features))
+    Y = np.matmul(np.transpose(features), targets)
+    return np.matmul(X,Y)
+    print(np.matmul(X,Y))
+
+#weights = normalEquations(featureMatrix('Database.txt'),targetMatrix('Database.txt'))
+#print(weights)
+
+
+"""feature = []
 target = []
 for i in results:
     for j in i:
@@ -47,4 +57,5 @@ for i in results:
 #print(lr(feature,target))
 feature = np.array(feature)
 target = np.array(target)
-AT
+normalEquations(feature,target)"""
+

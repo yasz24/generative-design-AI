@@ -216,7 +216,7 @@ class System:
             else:
                 allDisplacements[idx] = displacements[0]
                 displacements = displacements[1:]
-        print (allDisplacements)
+        #print (allDisplacements)
         return allDisplacements
 
     def computeStresses(self):

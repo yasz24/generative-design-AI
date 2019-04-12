@@ -2,6 +2,7 @@ import json
 from System import System
 from Force import Load
 from graphics import StructureVisual
+import featureExtractor
 
 outputFile = "Database.txt"
 s = StructureVisual()
@@ -97,3 +98,5 @@ with open(outputFile, 'w') as outFile:
         json.dump(struct, outFile)
         outFile.write('\n')
 
+StructureVisual().drawStructure(struct8)
+print(featureExtractor.FeatureExtractorUtil().pointDistribution(struct8))
