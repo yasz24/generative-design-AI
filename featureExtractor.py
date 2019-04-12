@@ -45,11 +45,11 @@ class FeatureExtractorUtil:
             vertices[tuple(structure[key][1])].append([tuple(structure[key][0]), tuple(structure[key][1])])
 
         for vertex in vertices:
-            print("vertex {}".format(vertex))
+            #print("vertex {}".format(vertex))
             edges = vertices[vertex]
-            print("edges {}".format(edges))
+            #print("edges {}".format(edges))
             angleEnds = list(itertools.combinations(edges, 2))
-            print("angle ends {}".format(angleEnds))
+            #print("angle ends {}".format(angleEnds))
             for pair in angleEnds:
                 if pair[0][0] == vertex:
                     vecA = np.asarray(pair[0][1]) - np.asarray(vertex)
@@ -66,7 +66,7 @@ class FeatureExtractorUtil:
 
         totalAngle = totalAngle / 2 
         averageAngle = totalAngle / numAngles
-        print("averageAngle {}".format(averageAngle))
+        #print("averageAngle {}".format(averageAngle))
         return averageAngle
         
     def pointDistribution(self, structure):
@@ -104,7 +104,7 @@ class FeatureExtractorUtil:
                 maxIdx = idx
         if maxIdx == 0:
             maxIdx = idx
-        fixedNodes = [nodes.index((0, 0)), maxIdx]
+        fixedNodes = [nodes.index([0, 0]), maxIdx]
         system = System(modulus=30e6, area=10, inertia=100, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections,
                         loads=loads)
         return system.computeDisplacements()
