@@ -36,6 +36,15 @@ def lr(features, targets, N = 100, alpha = 0.01):
             theta[j] -= alpha * error * features[i][j]
     return theta
 
+def normalEquations(features, targets):
+    print(np.matmul(np.transpose(features), features))
+    X = np.linalg.inv(np.matmul(np.transpose(features), features))
+    Y = np.matmul(np.transpose(features), targets)
+    return np.matmul(X,Y)
+    print(np.matmul(X,Y))
+
+#weights = normalEquations(featureMatrix('Database.txt'),targetMatrix('Database.txt'))
+#print(weights)
 
 
 """feature = []
