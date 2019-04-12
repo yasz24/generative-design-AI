@@ -22,6 +22,7 @@ def targetMatrix(dataSet):
     return [targetExtractor.extractTargets(structure) for structure in data]
 
 def evaluate(theta, x):
+    print(sum([theta[i] * x[i] for i in range(len(x))]))
     return sum([theta[i] * x[i] for i in range(len(x))])
 
 def lr(features, targets, N = 200, alpha = 0.001):
@@ -42,4 +43,7 @@ for i in results:
         feature.append(i[1:-1])
         target.append(i[-1])
 
-print(lr(feature,target))
+#print(lr(feature,target))
+feature = np.array(feature)
+target = np.array(target)
+AT
