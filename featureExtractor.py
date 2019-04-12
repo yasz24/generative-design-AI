@@ -14,7 +14,7 @@ class FeatureExtractorUtil:
     def extractFeatures(self, structure):
         features = [self.totalLengthFeature(structure),
                     self.averageAngle(structure),
-                    self.pointDistribution(structure),
+                    #self.pointDistribution(structure),
                     self.averageDisplacement(structure)]
         return features
 
