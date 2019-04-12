@@ -2,6 +2,7 @@ import numpy as np
 from System import System
 from Force import Load
 import itertools
+import math
 import json
 
 class FeatureExtractorUtil:
@@ -65,6 +66,7 @@ class FeatureExtractorUtil:
 
         totalAngle = totalAngle / 2 
         averageAngle = totalAngle / numAngles
+        averageAngle = math.degrees(averageAngle)
         print("averageAngle {}".format(averageAngle))
         return averageAngle
         
