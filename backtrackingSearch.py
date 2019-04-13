@@ -12,8 +12,8 @@ start = time.time()
 
 
 
-#weights = normalEquations(featureMatrix('Database.txt'),targetMatrix('Database.txt'))
-#print(weights)
+weights = normalEquations(featureMatrix('Database.txt'),targetMatrix('Database.txt'))
+print(weights)
 
 
 def backtrackingSearch(csp):
@@ -29,7 +29,8 @@ def recursiveBackTrackingSearch(assignment, variables, domains, constraints):
         #could do an argmax here to make the best possible assignment/ q-learning here
         """Some sort of regression choosing should go here"""
         """*************************************"""
-        #hypothesis = evaluate(weights, FeatureExtractorUtil().extractFeatures(assignment))
+       # a = json.dumps(assignment)
+       #hypothesis = evaluate(weights, FeatureExtractorUtil().extractFeatures(a))
         """*************************************"""
         #can also randomize values picked here, as well as the domainList picked.
         domainList = list(domainList)
@@ -110,7 +111,7 @@ def createDeepCopy(domains):
     return newDomain
 
 
-csp = CSP(7, 0)
+csp = CSP(10, 0)
 
 print(csp.domains)
 
