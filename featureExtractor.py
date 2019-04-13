@@ -69,7 +69,6 @@ class FeatureExtractorUtil:
         averageAngle = totalAngle / numAngles
 
         averageAngle = math.degrees(averageAngle)
-        print("averageAngle {}".format(averageAngle))
         return averageAngle
         
     def pointDistribution(self, structure):

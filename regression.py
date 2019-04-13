@@ -29,33 +29,33 @@ def lr(features, targets, N = 100, alpha = 0.01):
     for k in range(N):
         i = k % len(features)
         h = evaluate(theta, features[i])
-        print("targets {}".format(targets))
-        print("i {} hypothesis {}".format(i, h))
-        error = targets[i] - h
+        # print("targets {}".format(targets))
+        # print("i {} hypothesis {}".format(i, h))
+        error = h - targets[i]  
         for j in range(len(theta)):
             theta[j] -= alpha * error * features[i][j]
     return theta
 
 def normalEquations(features, targets):
-    print(np.matmul(np.transpose(features), features))
-    X = np.linalg.inv(np.matmul(np.transpose(features), features))
+    X = np.matmul(np.transpose(features), features)
     Y = np.matmul(np.transpose(features), targets)
-    return np.matmul(X,Y)
-    print(np.matmul(X,Y))
+    return np.linalg.solve(X, Y)
+    
 
 #weights = normalEquations(featureMatrix('Database.txt'),targetMatrix('Database.txt'))
 #print(weights)
 
 
-"""feature = []
+feature = []
 target = []
 for i in results:
     for j in i:
         feature.append(i[1:-1])
         target.append(i[-1])
 
-#print(lr(feature,target))
+
 feature = np.array(feature)
 target = np.array(target)
-normalEquations(feature,target)"""
+print(lr(feature, target, 100, 0.001))
+normalEquations(feature,target)
 

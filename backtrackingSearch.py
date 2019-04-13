@@ -9,8 +9,8 @@ import time
 start = time.time()
 "the code you want to test stays here"
 
-weights = normalEquations(featureMatrix('Database.txt'),targetMatrix('Database.txt'))
-print(weights)
+#weights = normalEquations(featureMatrix('Database.txt'),targetMatrix('Database.txt'))
+#print(weights)
 
 def backtrackingSearch(csp):
     return recursiveBackTrackingSearch({}, csp.variables, csp.domains, csp.constraints)
@@ -25,7 +25,7 @@ def recursiveBackTrackingSearch(assignment, variables, domains, constraints):
         #could do an argmax here to make the best possible assignment/ q-learning here
         """Some sort of regression choosing should go here"""
         """*************************************"""
-        hypothesis = evaluate(weights, FeatureExtractorUtil().extractFeatures(assignment))
+        #hypothesis = evaluate(weights, FeatureExtractorUtil().extractFeatures(assignment))
         """*************************************"""
         #can also randomize values picked here, as well as the domainList picked.
         shuffle(domainList)
@@ -105,10 +105,10 @@ def createDeepCopy(domains):
     return newDomain
 
 
-csp = CSP(4, 0)
-#print(csp.domains)
+csp = CSP(6, 0)
+print(csp.domains)
 
-#assignment = backtrackingSearch(csp)
-#print(assignment)
+assignment = backtrackingSearch(csp)
+print(assignment)
 #StructureVisual().drawStructure(assignment)
 
