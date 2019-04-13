@@ -124,4 +124,5 @@ class FeatureExtractorUtil:
 beam = {"beam0": [[0, 0], [4, 0]], "beam1": [[0, 0], [4, 4]], "beam2": [[4, 2], [2, 4]]}
 f = FeatureExtractorUtil().extractFeatures(beam)
 print(f)
-#StructureVisual().drawStructure(beam)
+
+

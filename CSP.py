@@ -27,36 +27,28 @@ class CSP:
             for j in range(grid_size):
                 if not ((i ==0) and (j==0)): 
                     array1.append((startPos, (i, j)))
-        domains["beam0"] = [array1]
+        domains["beam0"] = tuple([array1])
 
-        curBeam = 1
-        top = False
-        while curBeam < grid_size:
-            oldbeam = "beam" + str((curBeam -1))
-            newbeam = "beam" + str(curBeam)
-            prevMapValue =  domains[oldbeam]
-            newMapValue = domains[newbeam]
+        commonDomain = []
+        for i in range(grid_size):
+            for j in range(grid_size):
+                domainList = []
+                for k in range(grid_size):
+                    for l in range(grid_size):
+                        if (k, l) != (i, j):
+                            domainList.append(((i, j), (k, l)))
+                commonDomain.append(tuple(domainList))
 
-            startPositions = []
-            for domainList in prevMapValue:
-                for tup in domainList:
-                    startPositions.append(tup[1])
 
-            for startPosition in startPositions:
-                temp = []
-                if top:
-                    for i in range(grid_size):
-                        for j in range(grid_size):
-                            if not (i, j) == startPosition: 
-                                temp.append((startPosition, (i, j)))
-                else:
-                    for i in range(grid_size):
-                        for j in range(grid_size):
-                            if not (i, j) == startPosition: 
-                                temp.append((startPosition, (i, j)))
-                newMapValue.append(temp)
-            top = not top
-            curBeam+=1
+        for idx in range(1, grid_size):
+            beam = "beam" + str(idx)
+            beamDomain = []
+
+            for domainTuple in commonDomain:
+                beamDomain.append(domainTuple)
+
+            domains[beam] = beamDomain
+
         return domains
 
     def checkConstraints(self, assignment):
