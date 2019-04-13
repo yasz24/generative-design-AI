@@ -10,12 +10,11 @@ import time
 start = time.time()
 "the code you want to test stays here"
 
-<<<<<<< HEAD
-weights = lr(featureMatrix('Database.txt'),targetMatrix('Database.txt'))
-=======
+
+
 #weights = normalEquations(featureMatrix('Database.txt'),targetMatrix('Database.txt'))
 #print(weights)
->>>>>>> master
+
 
 def backtrackingSearch(csp):
     return recursiveBackTrackingSearch({}, csp.variables, csp.domains, csp.constraints)
