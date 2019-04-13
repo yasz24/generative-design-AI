@@ -28,6 +28,7 @@ def recursiveBackTrackingSearch(assignment, variables, domains, constraints):
         #hypothesis = evaluate(weights, FeatureExtractorUtil().extractFeatures(assignment))
         """*************************************"""
         #can also randomize values picked here, as well as the domainList picked.
+        domainList = list(domainList)
         shuffle(domainList)
         for next_val in domainList:
             assignment[next_var] = next_val
