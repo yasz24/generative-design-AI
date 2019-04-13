@@ -12,10 +12,13 @@ class FeatureExtractorUtil:
        pass
 
     def extractFeatures(self, structure):
-        features = [self.totalLengthFeature(structure),
-                    self.averageAngle(structure),
-                    self.pointDistribution(structure),
-                    self.averageDisplacement(structure)]
+        if structure == {}:
+            return [0,0,0,0]
+        else:
+            features = [self.totalLengthFeature(structure),
+                        self.averageAngle(structure),
+                        self.pointDistribution(structure),
+                        self.averageDisplacement(structure)]
         return features
 
     def extractTargets(self, structure):
@@ -31,7 +34,7 @@ class FeatureExtractorUtil:
     def averageAngle(self, structure):
         totalAngle = 0
         numAngles = 0
-
+        print(structure)
         #construct a graph from the structure
         vertices = {}
         for key in structure:
@@ -65,11 +68,14 @@ class FeatureExtractorUtil:
                 totalAngle += np.arccos(np.dot(vecA,vecB)/(magA*magB))
                 numAngles += 1
 
-        totalAngle = totalAngle / 2 
-        averageAngle = totalAngle / numAngles
+        totalAngle = totalAngle / 2
+        if numAngles == 0:
+            return 0
+        else:
+            averageAngle = totalAngle / numAngles
 
         averageAngle = math.degrees(averageAngle)
-        print("averageAngle {}".format(averageAngle))
+        #print("averageAngle {}".format(averageAngle))
         return averageAngle
         
     def pointDistribution(self, structure):
@@ -84,6 +90,7 @@ class FeatureExtractorUtil:
         return difference
 
     def computeSolution(self, structure):
+        print (structure)
         nodes = []
         for key in structure:
             nodeA, nodeB = structure[key]
@@ -114,6 +121,7 @@ class FeatureExtractorUtil:
     def maxDisplacement(self, structure):
         return max(self.computeSolution(structure))
 
-beam = {"beam0": [[0, 0], [4, 0]], "beam1": [[0, 0], [4, 4]], "beam2": [[4, 2], [4, 2]]}
-f = FeatureExtractorUtil()
+beam = {"beam0": [[0, 0], [4, 0]], "beam1": [[0, 0], [4, 4]], "beam2": [[4, 2], [2, 4]]}
+f = FeatureExtractorUtil().extractFeatures(beam)
+print(f)
 #StructureVisual().drawStructure(beam)
