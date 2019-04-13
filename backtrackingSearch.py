@@ -4,13 +4,18 @@ from random import shuffle
 from graphics import *
 from featureExtractor import *
 from regression import *
+import json
 
 import time
 start = time.time()
 "the code you want to test stays here"
 
+<<<<<<< HEAD
+weights = lr(featureMatrix('Database.txt'),targetMatrix('Database.txt'))
+=======
 #weights = normalEquations(featureMatrix('Database.txt'),targetMatrix('Database.txt'))
 #print(weights)
+>>>>>>> master
 
 def backtrackingSearch(csp):
     return recursiveBackTrackingSearch({}, csp.variables, csp.domains, csp.constraints)
@@ -107,9 +112,10 @@ def createDeepCopy(domains):
 
 
 csp = CSP(6, 0)
+
 print(csp.domains)
 
 assignment = backtrackingSearch(csp)
 print(assignment)
-#StructureVisual().drawStructure(assignment)
+StructureVisual().drawStructure(assignment)
 
