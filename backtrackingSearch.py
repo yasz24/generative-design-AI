@@ -111,7 +111,9 @@ def createDeepCopy(domains):
     return newDomain
 
 
+
 csp = CSP(10, 0)
+
 
 print(csp.domains)
 
