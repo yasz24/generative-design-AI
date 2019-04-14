@@ -29,7 +29,7 @@ def recursiveBackTrackingSearch(assignment, variables, domains, constraints):
         #could do an argmax here to make the best possible assignment/ q-learning here
         """Some sort of regression choosing should go here"""
         """*************************************"""
-       # a = json.dumps(assignment)
+       #a = json.dumps(assignment)
        #hypothesis = evaluate(weights, FeatureExtractorUtil().extractFeatures(a))
         """*************************************"""
         #can also randomize values picked here, as well as the domainList picked.

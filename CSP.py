@@ -98,7 +98,7 @@ class CSP:
             solutions = system.computeDisplacements()
             print(solutions)
             #thresholdDisplacement = 0.000005
-            thresholdDisplacement = 10
+            thresholdDisplacement = 0.000025
             validAssignment = not(abs(max(solutions)) > thresholdDisplacement or abs(min(solutions)) > thresholdDisplacement)
             print(validAssignment)
             return validAssignment
