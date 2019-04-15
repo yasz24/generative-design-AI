@@ -112,16 +112,18 @@ def createDeepCopy(domains):
 
 
 
-csp = CSP(5, 0)
+csp = CSP(15, 0)
 
 
-print(csp.domains)
+#print(csp.domains)
 
 assignment = backtrackingSearch(csp)
+print("\n\n\n\n\n\n\n\n*******************************************")
 print(assignment)
-file = open('Database.txt', 'a')
-file.write("\n")
-file.write(json.dumps(assignment))
-file.close()
-StructureVisual().drawStructure(assignment)
+if assignment is not None:
+    file = open('Database.txt', 'a')
+    file.write("\n")
+    file.write(json.dumps(assignment))
+    file.close()
+    StructureVisual().drawStructure(assignment)
 

@@ -1,0 +1,27 @@
+class Node:
+    def __init__(self, state, path, cost):
+        self.state = state
+        self.path = path
+        self.cost = cost
+
+    def __eq__(self, other):
+        return self.state == other.state
+
+
+class Stack:
+    "A container with a last-in-first-out (LIFO) queuing policy."
+
+    def __init__(self):
+        self.list = []
+
+    def push(self, item):
+        "Push 'item' onto the stack"
+        self.list.append(item)
+
+    def pop(self):
+        "Pop the most recently pushed item from the stack"
+        return self.list.pop()
+
+    def isEmpty(self):
+        "Returns true if the stack is empty"
+        return len(self.list) == 0
