@@ -112,7 +112,7 @@ def createDeepCopy(domains):
 
 
 
-csp = CSP(10, 0)
+csp = CSP(5, 0)
 
 
 print(csp.domains)

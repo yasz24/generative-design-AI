@@ -1,4 +1,4 @@
-
+import copy
 
 ##structure -> list of structures
 def extractSubstructures(structure):
@@ -13,7 +13,8 @@ def extractSubstructures(structure):
             if path in substructures:
                 continue
             else:
-                substructures.append(path)
+                exploredSet = []
+                substructures.append(copy.deepcopy(path))
         else:
             exploredSet.append(node)
         children = graph[node]
@@ -39,4 +40,4 @@ def structureToGraph(structure):
     return graph
 
 
-print (extractSubstructures({'beam0': ((0, 0), (9, 7)), 'beam1': ((9, 7), (8, 7)), 'beam2': ((8, 7), (7, 7)), 'beam3': ((7, 7), (0, 0)), 'beam4': ((0, 0), (8, 7)), 'beam5': ((8, 7), (6, 7)), 'beam6': ((6, 7), (9, 7)), 'beam7': ((9, 7), (7, 7)), 'beam8': ((7, 7), (6, 7)), 'beam9': ((6, 7), (0, 0))}))
+print (extractSubstructures({'beam0': ((0, 0), (0, 3)), 'beam1': ((0, 3), (1, 3)), 'beam2': ((1, 3), (2, 3)), 'beam3': ((2, 3), (0, 0)), 'beam4': ((0, 0), (1, 3))}))
