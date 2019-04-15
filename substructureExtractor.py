@@ -8,24 +8,11 @@ def extractSubstructures(structure):
     substructures = []
     graph = structureToGraph(structure)
     print(graph)
-    spanningTree = GraphToSpanningTree(graph)
-    exploredSet = []
-    fringe = [(list(graph.keys())[0], [])]
-    while len(fringe) > 0:
-        node, path = fringe.pop(0)
-        path.append(node)
-        if node in exploredSet:
-            if path in substructures:
-                continue
-            else:
-                exploredSet = []
-                substructures.append(copy.deepcopy(path))
-        else:
-            exploredSet.append(node)
-        children = graph[node]
-        for child in children:
-            fringe.append((child, path))
-    return substructures
+    spanningTree, removed = GraphToSpanningTree(graph)
+    for key in removed:
+        for node in removed[key]:
+            pass
+
 
 ##structure to graph
 def structureToGraph(structure):
@@ -45,30 +32,31 @@ def structureToGraph(structure):
     return graph
 
 def GraphToSpanningTree(graph):
+    removed = {}
     spanningTree = copy.deepcopy(graph)
     cyclesExist = True
     while cyclesExist:
         for key in spanningTree:
-            removeCycle(spanningTree, key, key)
+            removeCycle(spanningTree, removed, key, key)
         for i in spanningTree:
             children = spanningTree[i]
             childrenConnections = itertools.combinations(children, 2)
             for connection in childrenConnections:
                 if connection[1] in spanningTree[connection[0]]:
-                    spanningTree[connection[0]]. remove(connection[1])
+                    spanningTree[connection[0]].remove(connection[1])
+                    removed[connection[0]] = connection[1]
         cyclesExist = False
-    print(spanningTree)
-    return spanningTree
+    return spanningTree, removed
 
-def removeCycle(spanningTree, key, start):
+def removeCycle(spanningTree, removed, key, start):
 
     if (start in spanningTree[key]):
         spanningTree[key].remove(start)
-
+        removed[key] = start
         return
     else:
         for node in spanningTree[key]:
-            removeCycle(spanningTree, node, start)
+            removeCycle(spanningTree, removed, node, start)
 
 
 def getLength(nodeA, nodeB):
