@@ -45,8 +45,9 @@ class FeatureExtractorUtil:
                 vertices[tuple(structure[key][1])] = []
 
         for key in structure:
-            vertices[tuple(structure[key][0])].append([tuple(structure[key][0]), tuple(structure[key][1])])
-            vertices[tuple(structure[key][1])].append([tuple(structure[key][0]), tuple(structure[key][1])])
+            #changed the edges from a list to tuples
+            vertices[tuple(structure[key][0])].append((tuple(structure[key][0]), tuple(structure[key][1])))
+            vertices[tuple(structure[key][1])].append((tuple(structure[key][0]), tuple(structure[key][1])))
 
         for vertex in vertices:
             #print("vertex {}".format(vertex))
