@@ -1,10 +1,12 @@
 from util import *
+import json
+from featureExtractor import *
 
 class ExtractSubStructures:
 	def __init__(self):
-       self.features = []
-       self.targets = []
-	def constructGraph(self, assignment):
+		self.features = []
+		self.targets = []
+	def constructGraph(self, structure):
 		graph = {}
 		for key in structure:
 			if not tuple(structure[key][0]) in graph:
@@ -77,7 +79,7 @@ class ExtractSubStructures:
 
 	def assignmentToSubstructureFeatures(self, assignment):
 		featureExtractor = FeatureExtractorUtil()
-		target = featureExtractor.extractTarget(assignment)
+		target = featureExtractor.extractTargets(assignment)
 		formattedSubstructures = []
 		allSubStructures = self.extractSubStructures(assignment)
 		for structureSize in allSubStructures:
@@ -96,7 +98,7 @@ class ExtractSubStructures:
 	def createRegressionData(self, dataSet):
 		data = [json.loads(line) for line in open(dataSet)]
 		for datapoint in data:
-			assignmentToSubstructureFeatures(datapoint)
+			self.assignmentToSubstructureFeatures(datapoint)
 
 	def getFeatures(self):
 		return self.features
@@ -105,7 +107,7 @@ class ExtractSubStructures:
 		return self.targets
 
 
-ExtractSubStructures().createRegressionData("D")
+ExtractSubStructures().createRegressionData("Database.txt")
 
 
 
