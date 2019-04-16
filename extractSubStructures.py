@@ -107,10 +107,15 @@ class ExtractSubStructures:
 		return self.targets
 
 
-ExtractSubStructures().createRegressionData("Database.txt")
+#structure = {'beam0': ((0, 0), (1, 2)), 'beam1': ((1, 2), (2, 2)), 'beam2': ((2, 2), (3, 2)), 'beam3': ((3, 2), (0, 0)), 'beam4': ((0, 0), (2, 2)), 'beam5': ((2, 2), (0, 3)), 'beam6': ((0, 3), (3, 2)), 'beam7': ((3, 2), (1, 2)), 'beam8': ((1, 2), (0, 3)), 'beam9': ((0, 3), (0, 0))}
+#substructures = ExtractSubStructures().extractSubStructures(structure)
+#count = 0
+#for sizes in substructures:
+#	for substructure in substructures[sizes]:
+#		count += 1
+#print (count)
 
-
-
-structure = {'beam0': ((0, 0), (1, 2)), 'beam1': ((1, 2), (2, 2)), 'beam2': ((2, 2), (3, 2)), 'beam3': ((3, 2), (0, 0)), 'beam4': ((0, 0), (2, 2)), 'beam5': ((2, 2), (0, 3)), 'beam6': ((0, 3), (3, 2)), 'beam7': ((3, 2), (1, 2)), 'beam8': ((1, 2), (0, 3)), 'beam9': ((0, 3), (0, 0))}
-
-print(ExtractSubStructures().extractSubStructures(structure))
+#e.createRegressionData("Database.txt")
+#features = e.getFeatures()
+#print("Feature length"),
+#print(len(features))

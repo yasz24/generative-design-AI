@@ -108,10 +108,7 @@ class CSP:
             pointsAtZero = list(filter(lambda node: node[1] == 0, nodes))
             print("Zero Points")
             print (len(pointsAtZero))
-            line = False
-            if len(pointsAtZero) > 4 and len(nodes) > 4:
-                line = True
-            return validAssignment and not line
+            return validAssignment
         else:
             return False
 

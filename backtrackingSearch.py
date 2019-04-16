@@ -10,12 +10,6 @@ import time
 start = time.time()
 "the code you want to test stays here"
 
-
-
-weights = normalEquations(featureMatrix('Database.txt'),targetMatrix('Database.txt'))
-print(weights)
-
-
 def backtrackingSearch(csp):
     return recursiveBackTrackingSearch({}, csp.variables, csp.domains, csp.constraints)
 
@@ -112,7 +106,7 @@ def createDeepCopy(domains):
 
 
 
-csp = CSP(12, 0)
+csp = CSP(10, 0)
 
 
 #print(csp.domains)
