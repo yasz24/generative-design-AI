@@ -8,10 +8,28 @@ def extractSubstructures(structure):
     substructures = []
     graph = structureToGraph(structure)
     print(graph)
-    spanningTree, removed = GraphToSpanningTree(graph)
-    for key in removed:
-        for node in removed[key]:
-            pass
+    #spanningTree, removed = GraphToSpanningTree(graph)
+    exploredSet = []
+    fringe = [(list(graph.keys())[0], [])]
+    while len(fringe) > 0:
+        node, path = fringe.pop(0)
+        path.append(node)
+        if node in exploredSet:
+            if path in substructures:
+                continue
+            else:
+                occurances = [index for index, n in enumerate(path) if n ==node]
+                cycle = []
+                for i in range(occurances[0], occurances[1]):
+                    cycle.append(path[i])
+                path = []
+                substructures.append(cycle)
+        else:
+            exploredSet.append(node)
+        children = graph[node]
+        for child in children:
+            fringe.append((child, path))
+    return substructures
 
 
 ##structure to graph

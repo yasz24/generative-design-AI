@@ -105,9 +105,11 @@ class CSP:
             thresholdDisplacement = 0.000025
             validAssignment = not(abs(max(solutions)) > thresholdDisplacement or abs(min(solutions)) > thresholdDisplacement)
             print(validAssignment)
-            pointsAboveZero = list(filter(lambda node: node[1] > 0, nodes))
+            pointsAtZero = list(filter(lambda node: node[1] == 0, nodes))
+            print("Zero Points")
+            print (len(pointsAtZero))
             line = False
-            if len(pointsAboveZero) == 0 and len(nodes) > self.grid_size / 2:
+            if len(pointsAtZero) > 4 and len(nodes) > 4:
                 line = True
             return validAssignment and not line
         else:
