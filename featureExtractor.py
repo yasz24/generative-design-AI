@@ -102,15 +102,20 @@ class FeatureExtractorUtil:
         connections = [(nodes.index(structure[key][0]), nodes.index(structure[key][1])) for key in structure]
         nodeLoad = 10000
         loads = [Load(-1 * nodeLoad, 'y', idx) for idx in range(len(nodes))]
-        maxRight = (0, 0)
+        maxRight = (0, float("inf"))
         maxIdx = 0
         for idx in range(len(nodes)):
-            if nodes[idx][0] > maxRight[0] and nodes[idx][1] == 0:
+            if nodes[idx][0] >= maxRight[0] and nodes[idx][1] <= maxRight[1]:
                 maxRight = nodes[idx]
                 maxIdx = idx
-        if maxIdx == 0:
-            maxIdx = idx
-        fixedNodes = [nodes.index([0, 0]), maxIdx]
+        maxLeft = (float("inf"), float("inf"))
+        minIdx = 0 
+        for idx in range(len(nodes)):
+            if nodes[idx][0] <= maxLeft[0] and nodes[idx][1] <= maxLeft[1]:
+                maxLeft = nodes[idx]
+                minIdx = idx
+        fixedNodes = [minIdx, maxIdx]
+        print("structure {}".format(structure))
         system = System(modulus=30e6, area=10, inertia=100, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections,
                         loads=loads)
         return system.computeDisplacements()

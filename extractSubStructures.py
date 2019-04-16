@@ -1,7 +1,12 @@
 from util import *
+import json
+from featureExtractor import *
 
 class ExtractSubStructures:
-	def constructGraph(self, assignment):
+	def __init__(self):
+		self.features = []
+		self.targets = []
+	def constructGraph(self, structure):
 		graph = {}
 		for key in structure:
 			if not tuple(structure[key][0]) in graph:
@@ -36,15 +41,15 @@ class ExtractSubStructures:
 					cur_node = frontier.pop()
 					frontierStates.pop()
 					explored[cur_node.state] = True
-					print("j = {}".format(j))
-					print("cur_node cost = {}".format(cur_node.cost))
+					#print("j = {}".format(j))
+					#print("cur_node cost = {}".format(cur_node.cost))
 					if cur_node.cost > j :
 						continue
-					print("vertex {}".format(vertex))
-					print("cur_node.state {}".format(cur_node.state))
-					print(vertex == cur_node.state)
+					#print("vertex {}".format(vertex))
+					#print("cur_node.state {}".format(cur_node.state))
+					#print(vertex == cur_node.state)
 					if vertex == cur_node.state and cur_node.cost == j:
-						print("append to subStructures")
+						#print("append to subStructures")
 						if j in subStructures:
 							#need to remove duplicates
 							#write make structure
@@ -54,7 +59,7 @@ class ExtractSubStructures:
 							subStructures[j].append(cur_node.path)
 						continue
 					for edge in graph[cur_node.state]:
-						print("edge: {}".format(edge))
+						#print("edge: {}".format(edge))
 
 						if edge[0] == cur_node.state:
 							next_state = edge[1]
@@ -66,11 +71,44 @@ class ExtractSubStructures:
 							updatePath.extend(cur_node.path)
 							updatePath.append(edge)
 							next_node = Node(next_state, updatePath, cost)
-							print("new node--state:{}, path:{}, cost:{}".format(next_node.state, next_node.path, next_node.cost))
+							#print("new node--state:{}, path:{}, cost:{}".format(next_node.state, next_node.path, next_node.cost))
 							frontier.push(next_node)
 							frontierStates.append(next_state)
-		print("here")
+		#print("here")
 		return subStructures
+
+	def assignmentToSubstructureFeatures(self, assignment):
+		featureExtractor = FeatureExtractorUtil()
+		target = featureExtractor.extractTargets(assignment)
+		formattedSubstructures = []
+		allSubStructures = self.extractSubStructures(assignment)
+		for structureSize in allSubStructures:
+			subStructures = allSubStructures[structureSize]
+			for subStructure in subStructures:
+				formattedDict = {}
+				for i in range(len(subStructure)):
+					beam = "beam" + str(i)
+					formattedDict[beam] = subStructure[i]
+				formattedSubstructures.append(formattedDict)
+		for formattedSubStructure in formattedSubstructures:
+			features = featureExtractor.extractFeatures(formattedSubStructure)
+			self.features.append(features)
+			self.targets.append(target)
+
+	def createRegressionData(self, dataSet):
+		data = [json.loads(line) for line in open(dataSet)]
+		for datapoint in data:
+			self.assignmentToSubstructureFeatures(datapoint)
+
+	def getFeatures(self):
+		return self.features
+
+	def getTargets(self):
+		return self.targets
+
+
+ExtractSubStructures().createRegressionData("Database.txt")
+
 
 
 structure = {'beam0': ((0, 0), (1, 2)), 'beam1': ((1, 2), (2, 2)), 'beam2': ((2, 2), (3, 2)), 'beam3': ((3, 2), (0, 0)), 'beam4': ((0, 0), (2, 2)), 'beam5': ((2, 2), (0, 3)), 'beam6': ((0, 3), (3, 2)), 'beam7': ((3, 2), (1, 2)), 'beam8': ((1, 2), (0, 3)), 'beam9': ((0, 3), (0, 0))}
