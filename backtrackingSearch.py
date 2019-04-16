@@ -3,12 +3,23 @@ from CSP import *
 from random import shuffle
 from graphics import *
 from featureExtractor import *
-from regression import *
+#from regression import *
 import json
+import csv
+from util import *
 
 import time
 start = time.time()
 "the code you want to test stays here"
+
+with open('Weights.csv', 'r') as f:
+    reader = csv.reader(f)
+    weights = list(reader)
+
+weights = weights[0]
+for i in range(len(weights)):
+    weights[i] = float(weights[i])
+print(weights)
 
 def backtrackingSearch(csp):
     return recursiveBackTrackingSearch({}, csp.variables, csp.domains, csp.constraints)
@@ -19,6 +30,48 @@ def recursiveBackTrackingSearch(assignment, variables, domains, constraints):
         return assignment
     next_var = chooseVariable(assignment, variables)
 	#best approach probably to merge items in each domain list.
+    for domainList in domains[next_var]:
+        #could do an argmax here to make the best possible assignment/ q-learning here
+        """Some sort of regression choosing should go here"""
+        """*************************************"""
+       #a = json.dumps(assignment)
+       #hypothesis = evaluate(weights, FeatureExtractorUtil().extractFeatures(a))
+        """*************************************"""
+        #can also randomize values picked here, as well as the domainList picked.
+        domainList = list(domainList)
+        shuffle(domainList)
+        for next_val in domainList:
+            assignment[next_var] = next_val
+            print("****************next_val********************")
+            print(next_val)
+            old_domains = createDeepCopy(domains)
+            if validAssignment(assignment, constraints):
+                print("*********validAssignment next_val{}".format(next_val))
+                #print("next_val{}".format(next_val))
+                updateDomains(assignment, variables, domains, next_val)
+                if noEmptyDomain(domains):
+                    result = recursiveBackTrackingSearch(assignment, variables, domains, constraints)
+                    if result is not None:
+                        return result
+            del assignment[next_var]
+            print("****backtracked next_val{}, next_var{}".format(next_val, next_var))
+
+            domains = old_domains
+    return None
+
+
+
+def backTrackingSearchWithHeuristic(assignment, variables, domains, constraints):
+    if assignmentComplete(assignment, variables):
+        return assignment
+    next_var = chooseVariable(assignment, variables)
+    domain = PriorityQueue()
+    for domainList in domains[next_var]:
+        for domain in domainList:
+            #create a priority queue where priorities are the hypothesis computed using the weights.
+            #pop items in order of lowest priority first
+
+    #best approach probably to merge items in each domain list.
     for domainList in domains[next_var]:
         #could do an argmax here to make the best possible assignment/ q-learning here
         """Some sort of regression choosing should go here"""
@@ -106,18 +159,18 @@ def createDeepCopy(domains):
 
 
 
-csp = CSP(10, 0)
+#csp = CSP(10, 0)
 
 
 #print(csp.domains)
 
-assignment = backtrackingSearch(csp)
-print("\n\n\n\n\n\n\n\n*******************************************")
-print(assignment)
-if assignment is not None:
-    file = open('Database.txt', 'a')
-    file.write("\n")
-    file.write(json.dumps(assignment))
-    file.close()
-    StructureVisual().drawStructure(assignment)
+# assignment = backtrackingSearch(csp)
+# print("\n\n\n\n\n\n\n\n*******************************************")
+# print(assignment)
+# if assignment is not None:
+#     file = open('Database.txt', 'a')
+#     file.write("\n")
+#     file.write(json.dumps(assignment))
+#     file.close()
+#     StructureVisual().drawStructure(assignment)
 
