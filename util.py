@@ -10,11 +10,10 @@ class Node:
 
 class Stack:
     "A container with a last-in-first-out (LIFO) queuing policy."
-
     def __init__(self):
         self.list = []
 
-    def push(self, item):
+    def push(self,item):
         "Push 'item' onto the stack"
         self.list.append(item)
 
