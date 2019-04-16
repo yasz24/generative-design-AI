@@ -54,12 +54,14 @@ class ExtractSubStructures:
 							subStructures[j].append(cur_node.path)
 						continue
 					for edge in graph[cur_node.state]:
+						print("edge: {}".format(edge))
+
 						if edge[0] == cur_node.state:
 							next_state = edge[1]
 						else:
 							next_state = edge[0]
 						cost = cur_node.cost+1
-						if not (next_state in explored) or next_state == vertex:
+						if not (next_state in explored) or (next_state == vertex and not edge in cur_node.path):
 							updatePath = []
 							updatePath.extend(cur_node.path)
 							updatePath.append(edge)
@@ -71,6 +73,6 @@ class ExtractSubStructures:
 		return subStructures
 
 
-structure = {"beam0": [[0, 0], [4, 0]], "beam1": [[4, 0], [4, 4]], "beam2": [[4, 4], [0, 4]], "beam3": [[0, 4], [0, 0]], "beam4": [[0, 4], [4, 0]], "beam5": [[0,0], [4,0]]}
+structure = {'beam0': ((0, 0), (1, 2)), 'beam1': ((1, 2), (2, 2)), 'beam2': ((2, 2), (3, 2)), 'beam3': ((3, 2), (0, 0)), 'beam4': ((0, 0), (2, 2)), 'beam5': ((2, 2), (0, 3)), 'beam6': ((0, 3), (3, 2)), 'beam7': ((3, 2), (1, 2)), 'beam8': ((1, 2), (0, 3)), 'beam9': ((0, 3), (0, 0))}
 
 print(ExtractSubStructures().extractSubStructures(structure))
