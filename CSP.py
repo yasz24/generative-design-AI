@@ -7,6 +7,7 @@ class CSP:
         self.domains = self.initializeDomain(grid_size)
         self.constraints = self.checkConstraints
         self.discConstant = 1
+        self.grid_size = grid_size
 
     def initializeVariables(self, grid_size):
         temp = []
@@ -68,6 +69,9 @@ class CSP:
                 if nodeB not in nodes:
                     nodes.append(nodeB)
 
+            if (self.grid_size-1, 0) not in nodes:
+                return False
+
             connections = []
             for key in assignment:
                 nodeA, nodeB = assignment[key]
@@ -98,10 +102,16 @@ class CSP:
             solutions = system.computeDisplacements()
             print(solutions)
             #thresholdDisplacement = 0.000005
-            thresholdDisplacement = 10
+            thresholdDisplacement = 0.000025
             validAssignment = not(abs(max(solutions)) > thresholdDisplacement or abs(min(solutions)) > thresholdDisplacement)
             print(validAssignment)
-            return validAssignment
+            pointsAtZero = list(filter(lambda node: node[1] == 0, nodes))
+            print("Zero Points")
+            print (len(pointsAtZero))
+            line = False
+            if len(pointsAtZero) > 4 and len(nodes) > 4:
+                line = True
+            return validAssignment and not line
         else:
             return False
 
