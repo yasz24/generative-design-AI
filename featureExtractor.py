@@ -105,12 +105,26 @@ class FeatureExtractorUtil:
         maxRight = (0, 0)
         maxIdx = 0
         for idx in range(len(nodes)):
-            if nodes[idx][0] > maxRight[0] and nodes[idx][1] == 0:
+            if nodes[idx][0] > maxRight[0]:
                 maxRight = nodes[idx]
                 maxIdx = idx
-        if maxIdx == 0:
-            maxIdx = idx
-        fixedNodes = [nodes.index([0, 0]), maxIdx]
+            if nodes[idx][0] == maxRight[0]:
+                if nodes[idx][1] < maxRight[1]:
+                    maxRight = nodes[idx]
+                    maxIdx = idx
+        maxLeft = (float("inf"), float("inf"))
+        minIdx = 0 
+        for idx in range(len(nodes)):
+            if nodes[idx][0] < maxLeft[0]:
+                maxLeft = nodes[idx]
+                minIdx = idx
+            if nodes[idx][0] == maxLeft[0]:
+                if nodes[idx][1] < maxLeft[1]:
+                    maxLeft = nodes[idx]
+                    minIdx = idx
+        fixedNodes = [minIdx, maxIdx]
+        print(fixedNodes)
+        print("structure {}".format(structure))
         system = System(modulus=30e6, area=10, inertia=100, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections,
                         loads=loads)
         return system.computeDisplacements()
@@ -124,5 +138,6 @@ class FeatureExtractorUtil:
 
 beam = {"beam0": [[0, 0], [4, 0]], "beam1": [[0, 0], [4, 4]], "beam2": [[4, 2], [2, 4]]}
 f = FeatureExtractorUtil()
+f.computeSolution({'beam0': ((0, 0), (4, 4)), 'beam1': ((4, 4), (0, 4)), 'beam2': ((0, 4), (0, 0))})
 
 
