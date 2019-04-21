@@ -24,7 +24,7 @@ class BacktrackingSearch:
         self.featureExtractor = FeatureExtractorUtil()
 
     def backtrackingSearch(self, csp):
-        return self.recursiveBackTrackingSearch({}, csp.variables, csp.domains, csp.constraints)
+        return self.backTrackingSearchWithHeuristic({}, csp.variables, csp.domains, csp.constraints)
 
 
     def recursiveBackTrackingSearch(self, assignment, variables, domains, constraints):
