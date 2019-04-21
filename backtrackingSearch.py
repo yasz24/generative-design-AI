@@ -20,10 +20,11 @@ class BacktrackingSearch:
         for i in range(len(weights)):
             weights[i] = float(weights[i])
         self.weights = weights
-        print(self.weights)
+        self.regression = Regression("Database.txt")
+        self.featureExtractor = FeatureExtractorUtil()
 
     def backtrackingSearch(self, csp):
-        return self.recursiveBackTrackingSearch({}, csp.variables, csp.domains, csp.constraints)
+        return self.backTrackingSearchWithHeuristic({}, csp.variables, csp.domains, csp.constraints)
 
 
     def recursiveBackTrackingSearch(self, assignment, variables, domains, constraints):
@@ -63,45 +64,38 @@ class BacktrackingSearch:
 
 
 
-    def backTrackingSearchWithHeuristic(assignment, variables, domains, constraints):
+    def backTrackingSearchWithHeuristic(self, assignment, variables, domains, constraints):
         if self.assignmentComplete(assignment, variables):
             return assignment
         next_var = self.chooseVariable(assignment, variables)
         domain = PriorityQueue()
         for domainList in domains[next_var]:
-            for domain in domainList:
-                return
-                #create a priority queue where priorities are the hypothesis computed using the weights.
-                #pop items in order of lowest priority first 
-
-        #best approach probably to merge items in each domain list.
-        for domainList in domains[next_var]:
-            #could do an argmax here to make the best possible assignment/ q-learning here
-            """Some sort of regression choosing should go here"""
-            """*************************************"""
-           #a = json.dumps(assignment)
-           #hypothesis = evaluate(weights, FeatureExtractorUtil().extractFeatures(a))
-            """*************************************"""
-            #can also randomize values picked here, as well as the domainList picked.
-            domainList = list(domainList)
-            shuffle(domainList)
-            for next_val in domainList:
-                assignment[next_var] = next_val
-                print("****************next_val********************")
-                print(next_val)
-                old_domains = self.createDeepCopy(domains)
-                if self.validAssignment(assignment, constraints):
-                    print("*********validAssignment next_val{}".format(next_val))
-                    #print("next_val{}".format(next_val))
-                    self.updateDomains(assignment, variables, domains, next_val)
-                    if self.noEmptyDomain(domains):
-                        result = self.recursiveBackTrackingSearch(assignment, variables, domains, constraints)
-                        if result is not None:
-                            return result
+            for domain_val in domainList:
+                assignment[next_var] = domain_val
+                print("assignment {}".format(assignment))
+                features = self.featureExtractor.extractFeatures(assignment)
+                hypothesis = regression.evaluate(self.weights, features) 
+                domain.push(domain_val, hypothesis)
                 del assignment[next_var]
-                print("****backtracked next_val{}, next_var{}".format(next_val, next_var))
 
-                domains = old_domains
+
+        while not domain.isEmpty():
+            next_val = domain.pop()
+            assignment[next_var] = next_val
+            print("****************next_val********************")
+            print(next_val)
+            old_domains = self.createDeepCopy(domains)
+            if self.validAssignment(assignment, constraints):
+                print("*********validAssignment next_val{}".format(next_val))
+                #print("next_val{}".format(next_val))
+                self.updateDomains(assignment, variables, domains, next_val)
+                if self.noEmptyDomain(domains):
+                    result = self.backTrackingSearchWithHeuristic(assignment, variables, domains, constraints)
+                    if result is not None:
+                        return result
+            del assignment[next_var]
+            print("****backtracked next_val{}, next_var{}".format(next_val, next_var))
+            domains = old_domains
         return None
 
     def assignmentComplete(self, assignment, variables):
@@ -160,11 +154,11 @@ class BacktrackingSearch:
             newDomain[key] = newValue
         return newDomain
 
-BacktrackingSearch()
+backTrackSearch =BacktrackingSearch()
 
 
-#csp = CSP(10, 0)
-
+csp = CSP(10, 0)
+print(backTrackSearch.backtrackingSearch(csp))
 
 #print(csp.domains)
 

@@ -1,3 +1,5 @@
+import heapq
+
 class Node:
     def __init__(self, state, path, cost):
         self.state = state
