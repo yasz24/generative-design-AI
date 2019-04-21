@@ -153,6 +153,7 @@ class BacktrackingSearch:
                 newValue.append(newDomainList)
             newDomain[key] = newValue
         return newDomain
+    
 
 backTrackSearch =BacktrackingSearch()
 
