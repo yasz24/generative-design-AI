@@ -74,7 +74,7 @@ class BacktrackingSearch:
                 assignment[next_var] = domain_val
                 print("assignment {}".format(assignment))
                 features = self.featureExtractor.extractFeatures(assignment)
-                hypothesis = regression.evaluate(self.weights, features) 
+                hypothesis = self.regression.evaluate(self.weights, features)
                 domain.push(domain_val, hypothesis)
                 del assignment[next_var]
 
@@ -158,7 +158,7 @@ class BacktrackingSearch:
 backTrackSearch =BacktrackingSearch()
 
 
-csp = CSP(10, 0)
+csp = CSP(5, 0)
 print(backTrackSearch.backtrackingSearch(csp))
 
 #print(csp.domains)

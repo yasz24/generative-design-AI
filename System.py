@@ -28,6 +28,11 @@ class System:
         self.inertia = inertia
         self.assemble()
 
+    def checkUniqueNodes(self):
+        if len(self.nodes) != len(set(self.nodes)):
+            raise Exception("Duplicate Nodes")
+
+
     def addloads(self, loads):
         """
         Adds a load to the system
