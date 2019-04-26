@@ -210,7 +210,7 @@ class System:
         kglobal, loads, removed_one = self.applyBoundaryConditions()
         allDisplacements = np.zeros(len(self.nodes) * self.degreesOfFreedom)
         displacements = np.matmul(np.linalg.inv(kglobal), loads)
-        print("displacements{}".format(displacements))
+        #print("displacements{}".format(displacements))
         for idx in range(len(allDisplacements)):
             if idx in removed_one:
                 allDisplacements[idx] = 0
