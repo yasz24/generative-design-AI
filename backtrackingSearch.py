@@ -24,13 +24,12 @@ class BacktrackingSearch:
         self.featureExtractor = FeatureExtractorUtil()
 
     def backtrackingSearch(self, csp):
-        return self.backTrackingSearchWithHeuristic({}, csp.variables, csp.domains, csp.constraints)
+        return self.backTrackingSearchWithHeuristic({}, csp.variables, csp.domains, csp.constraints, 0)
 
 
-    def recursiveBackTrackingSearch(self, assignment, variables, domains, constraints):
-
+    def recursiveBackTrackingSearch(self, assignment, variables, domains, constraints, nodesExpanded):
         if self.assignmentComplete(assignment, variables):
-            return assignment
+            return (assignment, nodesExpanded)
         next_var = self.chooseVariable(assignment, variables)
     	#best approach probably to merge items in each domain list.
         for domainList in domains[next_var]:
@@ -44,58 +43,60 @@ class BacktrackingSearch:
             domainList = list(domainList)
             shuffle(domainList)
             for next_val in domainList:
+                nodesExpanded +=1
                 assignment[next_var] = next_val
-                print("****************next_val********************")
-                print(next_val)
+                #print("****************next_val********************")
+                #print(next_val)
                 old_domains = self.createDeepCopy(domains)
                 if self.validAssignment(assignment, constraints):
-                    print("*********validAssignment next_val{}".format(next_val))
-                    #print("next_val{}".format(next_val))
+                    #print("*********validAssignment next_val{}".format(next_val))
+                    ##print("next_val{}".format(next_val))
                     self.updateDomains(assignment, variables, domains, next_val)
                     if self.noEmptyDomain(domains):
-                        result = self.recursiveBackTrackingSearch(assignment, variables, domains, constraints)
+                        result = self.recursiveBackTrackingSearch(assignment, variables, domains, constraints, nodesExpanded)
                         if result is not None:
-                            return result
+                            return (result[0], result[1])
                 del assignment[next_var]
-                print("****backtracked next_val{}, next_var{}".format(next_val, next_var))
+                #print("****backtracked next_val{}, next_var{}".format(next_val, next_var))
 
                 domains = old_domains
         return None
 
 
 
-    def backTrackingSearchWithHeuristic(self, assignment, variables, domains, constraints):
+    def backTrackingSearchWithHeuristic(self, assignment, variables, domains, constraints, nodesExpanded):
         if self.assignmentComplete(assignment, variables):
-            return assignment
+            return (assignment, nodesExpanded)
         next_var = self.chooseVariable(assignment, variables)
         domain = PriorityQueue()
         for domainList in domains[next_var]:
             for domain_val in domainList:
                 assignment[next_var] = domain_val
-                print("assignment {}".format(assignment))
+                #print("assignment {}".format(assignment))
                 features = self.featureExtractor.extractFeatures(assignment)
                 hypothesis = self.regression.evaluate(self.weights, features) 
-                print("domain {}, hypothesis{}".format(domain_val, hypothesis))
+                #print("domain {}, hypothesis{}".format(domain_val, hypothesis))
                 domain.push(domain_val, hypothesis)
                 del assignment[next_var]
 
 
         while not domain.isEmpty():
             next_val = domain.pop()
+            nodesExpanded +=1
             assignment[next_var] = next_val
-            print("****************next_val********************")
-            print(next_val)
+            #print("****************next_val********************")
+            #print(next_val)
             old_domains = self.createDeepCopy(domains)
             if self.validAssignment(assignment, constraints):
-                print("*********validAssignment next_val{}".format(next_val))
-                #print("next_val{}".format(next_val))
+                #print("*********validAssignment next_val{}".format(next_val))
+                ##print("next_val{}".format(next_val))
                 self.updateDomains(assignment, variables, domains, next_val)
                 if self.noEmptyDomain(domains):
-                    result = self.backTrackingSearchWithHeuristic(assignment, variables, domains, constraints)
+                    result = self.backTrackingSearchWithHeuristic(assignment, variables, domains, constraints, nodesExpanded)
                     if result is not None:
-                        return result
+                        return (result[0], result[1])
             del assignment[next_var]
-            print("****backtracked next_val{}, next_var{}".format(next_val, next_var))
+            #print("****backtracked next_val{}, next_var{}".format(next_val, next_var))
             domains = old_domains
         return None
 
@@ -118,12 +119,12 @@ class BacktrackingSearch:
 
 
     def updateDomains(self, assignment, variables, domains, next_val):
-        #print("********domains{}".format(domains))
+        ##print("********domains{}".format(domains))
         var_for_domain_update = self.chooseVariable(assignment, variables)
         if var_for_domain_update == None:
             return
-        # print("********var_for_domain_update{}".format(var_for_domain_update))
-        # print("********next_val{}".format(next_val))
+        # #print("********var_for_domain_update{}".format(var_for_domain_update))
+        # #print("********next_val{}".format(next_val))
         domainMapVal = domains[var_for_domain_update]
         newDomainMapVal = []
         for domainList in domainMapVal:
@@ -135,10 +136,10 @@ class BacktrackingSearch:
         return
 
     def noEmptyDomain(self, domains):
-        #print(domains)
+        ##print(domains)
         for key in domains:
             if len(domains[key]) == 0:
-                # print("returning False")
+                # #print("returning False")
                 return False
         return True
 
@@ -159,16 +160,18 @@ backTrackSearch =BacktrackingSearch()
 
 
 csp = CSP(10, 0)
-start = time.time()
-print(backTrackSearch.backtrackingSearch(csp))
-print(time.time()- start)
+finalMap = {} 
+for i in range(100):
+    result = backTrackSearch.backtrackingSearch(csp)
+    finalMap[i] = result[1]
+print(finalMap)
 
 
-#print(csp.domains)
+##print(csp.domains)
 
 # assignment = backtrackingSearch(csp)
-# print("\n\n\n\n\n\n\n\n*******************************************")
-# print(assignment)
+# #print("\n\n\n\n\n\n\n\n*******************************************")
+# #print(assignment)
 # if assignment is not None:
 #     file = open('Database.txt', 'a')
 #     file.write("\n")

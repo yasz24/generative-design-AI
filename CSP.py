@@ -1,5 +1,6 @@
 from Force import Load
 from System import System
+import numpy as np
 
 class CSP:
     def __init__(self, grid_size, discConstant):
@@ -55,6 +56,8 @@ class CSP:
     def checkConstraints(self, assignment):
         print("assignment:{}".format(assignment))
         #code to make sure no to beams are the same.
+        if not self.noOverlaps(assignment):
+            return False
         assignmentTups = []
         for key in assignment:
             tup = assignment[key]
@@ -123,7 +126,31 @@ class CSP:
                     return False
             i+=1
         return True
- 
+
+    def noOverlaps(self, assignment):
+        for i in range(len(assignment)-1):
+            key1 = "beam" + str(i)
+            key2 = "beam" + str(i+1)
+
+            beam1 = assignment[key1]
+            beam2 = assignment[key2]
+
+            vec1 = np.asarray(beam1[0]) - np.asarray(beam1[1])
+            vec2 = np.asarray(beam2[0]) - np.asarray(beam2[1])
+
+            mag1 = np.sqrt((vec1[0])**2+(vec1[1])**2)
+            mag2 = np.sqrt((vec2[0])**2+(vec2[1])**2)
+
+            angle = np.arccos(np.dot(vec1,vec2)/(mag1*mag2))
+
+            diff = abs(angle - np.pi)
+
+            if diff < 0.00000000001:
+                print("overlap")
+                return False
+        return True
+
+
 
 
 

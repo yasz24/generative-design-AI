@@ -46,8 +46,8 @@ class Regression:
         self.weights = np.linalg.solve(X, Y)
 
 
-# r = Regression("Database.txt")
-# print(r.getWeights())
+r = Regression("Database.txt")
+print(r.getWeights())
 
 
 
