@@ -155,8 +155,10 @@ class BacktrackingSearch:
                 newValue.append(newDomainList)
             newDomain[key] = newValue
         return newDomain
+    
 
 backTrackSearch =BacktrackingSearch()
+
 
 
 csp = CSP(10, 0)
@@ -165,6 +167,7 @@ for i in range(100):
     result = backTrackSearch.backtrackingSearch(csp)
     finalMap[i] = result[1]
 print(finalMap)
+
 
 
 ##print(csp.domains)
