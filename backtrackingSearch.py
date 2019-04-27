@@ -160,13 +160,22 @@ class BacktrackingSearch:
 backTrackSearch =BacktrackingSearch()
 
 
-
 csp = CSP(10, 0)
-finalMap = {} 
-for i in range(100):
-    result = backTrackSearch.backtrackingSearch(csp)
-    finalMap[i] = result[1]
-print(finalMap)
+start = time.time()
+result = backTrackSearch.backtrackingSearch(csp)
+print(result)
+print(time.time() - start)
+StructureVisual().drawStructure(result[0])
+
+# csp = CSP(10, 0)
+# finalMap = {} 
+# for i in range(50):
+#     result = backTrackSearch.backtrackingSearch(csp)
+#     finalMap[i] = result[1]
+# print(finalMap)
+# file = open('testData.txt', 'a')
+# file.write(json.dumps(finalMap))
+# file.close()
 
 
 
