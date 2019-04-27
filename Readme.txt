@@ -1,0 +1,8 @@
+- A guide on how to navigate the code for this project:
+- CSP.py: The CSP object used to formulate the problem and associated classes to initialize variable, domains and checkConstraints.
+- backtrackingSearch.py: Implementation of the recursive backtracking search algorithms, with and without the heurisitic.
+- regression.py: Our implementaion of linear regression using the gradient descent and the normal equations. 
+- extractSubStructures.py: Extracting substructres from our dataset of full structures--used to run regression and learn weights off.
+- featureExtractor.py: The object that extracts features  for the linear regression from the structres provided to it. 
+- System.py: The finite element solver used to evaluate the stability of structures by calculating the displacement at each node in the structure, under load.
+- Database.txt: Our training data-set, generated using the randomized version of backtracking search. 

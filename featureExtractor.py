@@ -102,6 +102,7 @@ class FeatureExtractorUtil:
         connections = [(nodes.index(structure[key][0]), nodes.index(structure[key][1])) for key in structure]
         nodeLoad = 10000
         loads = [Load(-1 * nodeLoad, 'y', idx) for idx in range(len(nodes))]
+        #print("Nodes {}".format(nodes))
         maxRight = (0, 0)
         maxIdx = 0
         for idx in range(len(nodes)):
@@ -122,7 +123,12 @@ class FeatureExtractorUtil:
                 if nodes[idx][1] < maxLeft[1]:
                     maxLeft = nodes[idx]
                     minIdx = idx
+        #not a good way to fix this. think of a better way
+
+        if minIdx == maxIdx:
+            maxIdx+=1
         fixedNodes = [minIdx, maxIdx]
+        #print("fixedNodes {}".format(fixedNodes))
         #print(fixedNodes)
         #print("structure {}".format(structure))
         system = System(modulus=30e6, area=10, inertia=100, nodes=nodes, fixedNodes=fixedNodes, connectivity=connections,
