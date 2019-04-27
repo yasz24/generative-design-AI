@@ -27,7 +27,7 @@ class ExtractSubStructures:
 		subStructures = {}
 
 		for vertex in graph:
-			for j in range(3, len(assignment) + 1):
+			for j in range(2, len(assignment) + 1):
 				initialNode = Node(vertex, [], 0)
 				frontierStates = []
 				frontier = Stack()

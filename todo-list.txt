@@ -8,3 +8,4 @@
 - modify domain to include points in space
 - change domain updation such that any domains with atleast one of the nodes in the structures as start points are valid.
 - make no.of beams independent of grid size.
+- why are the weights negative when target change to avg displacement?
